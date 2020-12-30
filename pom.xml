@@ -20,6 +20,7 @@
         <module>customer-manager</module>
         <module>domain</module>
         <module>repository</module>
+        <module>bank-utils</module>
     </modules>
 
     <properties>

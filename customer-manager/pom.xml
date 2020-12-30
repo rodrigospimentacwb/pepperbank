@@ -14,11 +14,19 @@
     <description>Modulo de manutencao de clientes</description>
 
     <dependencies>
+        <!-- DEPENDENCIAS INTERNAS -->
         <dependency>
             <groupId>com.pepper.bank</groupId>
             <artifactId>repository</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.pepper.bank</groupId>
+            <artifactId>bank-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- DEPENDENCIAS EXTERNAS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
