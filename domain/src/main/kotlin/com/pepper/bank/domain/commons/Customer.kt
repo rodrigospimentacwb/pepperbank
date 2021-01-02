@@ -18,12 +18,12 @@ data class Customer (
     @Column(name = "id")
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    val id: UUID? = null,
+    var id: UUID? = null,
     @Column(name = "name", length = 100)
     @NotBlank
     @Size(min=2, max=100)
-    val name: String = "",
+    var name: String = "",
     @CPF
     @Column(name = "cpf", length = 11)
-    val cpf: String = ""
+    var cpf: String = ""
 )
