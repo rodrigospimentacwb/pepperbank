@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.lang.IllegalArgumentException
 import java.util.*
+import javax.validation.ConstraintViolation
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
 
 @Component
 class CustomerServiceImpl: CustomerService {
@@ -18,6 +22,15 @@ class CustomerServiceImpl: CustomerService {
 
     override fun create(customer: Customer): Customer {
         try {
+
+            val factory: ValidatorFactory = Validation.buildDefaultValidatorFactory()
+            val validator: Validator = factory.getValidator()
+            val constraintViolations: Set<ConstraintViolation<Customer>> = validator.validate(customer)
+            println("************ Array ConstraintValidations: " + constraintViolations)
+            for (const in constraintViolations) {
+                println("************" + const)
+            }
+
             // Criar validações
             customer.id = null
             return this.customerRepository.save(customer);

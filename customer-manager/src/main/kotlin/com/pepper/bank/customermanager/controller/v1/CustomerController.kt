@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import javax.validation.Valid
+import javax.validation.ConstraintViolation
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
+
 
 @RestController
 @RequestMapping(value = ["/api/v1/customers"])
@@ -26,7 +32,7 @@ class CustomerController {
     }
 
     @PostMapping
-    fun getCustomerId(@RequestBody customer: Customer): ResponseEntity<Customer> {
+    fun getCustomerId(@Valid @RequestBody customer: Customer): ResponseEntity<Customer> {
         return ResponseEntity(customerService.create(customer),HttpStatus.OK)
     }
 

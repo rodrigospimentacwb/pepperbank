@@ -21,7 +21,7 @@ data class Customer (
     var id: UUID? = null,
     @Column(name = "name", length = 100)
     @NotBlank
-    @Size(min=2, max=100)
+    @Size(min=2, max=100, message = "Minimo 2 maximo 100")
     var name: String = "",
     @CPF
     @Column(name = "cpf", length = 11)
