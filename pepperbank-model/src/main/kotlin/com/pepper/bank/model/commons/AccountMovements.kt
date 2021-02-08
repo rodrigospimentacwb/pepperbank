@@ -2,6 +2,7 @@ package com.pepper.bank.model.commons
 
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.validator.constraints.br.CPF
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -9,18 +10,19 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 @Entity
-@Table(name = "customer")
-data class Customer (
+@Table(name = "account_movements")
+data class AccountMovements (
     @Id
     @field:[NotNull]
     @Column(name = "id", nullable = false)
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     var id: UUID? = null,
-    @Column(name = "name", length = 100, nullable = false)
-    @field:[NotBlank Size(min=2, max=100, message = "Minimo 2 maximo 100 caracteres")]
-    var name: String = "",
-    @field:[CPF(message = "CPF inválido")]
-    @Column(name = "cpf", length = 11, nullable = false)
-    var cpf: String = ""
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    var account:Account,
+    @Column(name = "operation", length =1, nullable = false)
+    var operation:String,
+    @Column(name = "dateTime", nullable = false)
+    var dateTime:LocalDateTime
 )

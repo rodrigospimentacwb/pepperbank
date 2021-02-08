@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>bank-utils</artifactId>
+    <artifactId>pepperbank-exception-handler</artifactId>
 
     <dependencies>
         <dependency>

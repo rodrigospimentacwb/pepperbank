@@ -8,21 +8,21 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>customer-manager</artifactId>
+    <artifactId>pepperbank-customer-manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>customer-manager</name>
+    <name>pepperbank-customer-manager</name>
     <description>Modulo de manutencao de clientes</description>
 
     <dependencies>
         <!-- DEPENDENCIAS INTERNAS -->
         <dependency>
             <groupId>com.pepper.bank</groupId>
-            <artifactId>repository</artifactId>
+            <artifactId>pepperbank-repository</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.pepper.bank</groupId>
-            <artifactId>bank-utils</artifactId>
+            <artifactId>pepperbank-exception-handler</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
