@@ -15,5 +15,6 @@ BEGIN
    END IF;
    GRANT ALL PRIVILEGES ON DATABASE pepperbank TO root;
    CREATE SCHEMA IF NOT EXISTS pepperbank AUTHORIZATION root;
+   CREATE extension "uuid-ossp";
 END
 $do$;

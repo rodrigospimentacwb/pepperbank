@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20210802192800" author="rodrigo.pimenta">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="phone"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="phone">
+            <column name="id" type="UUID">
+                <constraints nullable="false" unique="true" primaryKey="true" />
+            </column>
+            <column name="account_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ddd" type="varchar(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(9)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customer_id" type="uuid">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createIndex indexName="phone_id_idx" tableName="phone">
+            <column name="id"/>
+        </createIndex>
+        <createIndex indexName="phone_customer_id_idx" tableName="phone">
+            <column name="customer_id"/>
+        </createIndex>
+        <createIndex indexName="phone_ddd_phone_idx" tableName="phone">
+            <column name="ddd"/>
+            <column name="phone"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="customer_id"
+                                 baseTableName="phone"
+                                 constraintName="fk_phone_customer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="customer"/>
+
+    </changeSet>
+
+</databaseChangeLog>

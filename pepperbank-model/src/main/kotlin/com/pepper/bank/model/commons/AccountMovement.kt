@@ -2,6 +2,7 @@ package com.pepper.bank.model.commons
 
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.validator.constraints.br.CPF
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -10,8 +11,8 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 @Entity
-@Table(name = "account_movements")
-data class AccountMovements (
+@Table(name = "account_movement")
+data class AccountMovement (
     @Id
     @field:[NotNull]
     @Column(name = "id", nullable = false)
@@ -23,6 +24,8 @@ data class AccountMovements (
     var account:Account,
     @Column(name = "operation", length =1, nullable = false)
     var operation:String,
-    @Column(name = "dateTime", nullable = false)
-    var dateTime:LocalDateTime
+    @Column(name = "datetime", nullable = false)
+    var dateTime:LocalDateTime,
+    @Column(name = "amount", nullable = false)
+    var amount:BigDecimal
 )

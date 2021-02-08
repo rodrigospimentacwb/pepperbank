@@ -28,7 +28,7 @@ data class Customer (
     @field:[Email(message = "E-mail inválido")]
     @Column(name = "email", length = 125, nullable = true)
     var email: String = "",
-    @Column(name = "birthDate", nullable = false)
+    @Column(name = "birthdate", nullable = false)
     var birthDate: LocalDate? = null,
     @OneToMany(mappedBy = "customer")
     var phones:List<Phone>? = null

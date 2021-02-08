@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20210802192800" author="rodrigo.pimenta">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="account_movement"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="account_movement">
+            <column name="id" type="UUID">
+                <constraints nullable="false" unique="true" primaryKey="true" />
+            </column>
+            <column name="account_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operation" type="varchar(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datetime" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="decimal(12, 2)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createIndex indexName="account_movement_id_idx" tableName="account_movement">
+            <column name="id"/>
+        </createIndex>
+        <createIndex indexName="account_movement_account_id_idx" tableName="account_movement">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="account_datetime_id_idx" tableName="account_movement">
+            <column name="datetime"/>
+        </createIndex>
+        <createIndex indexName="account_movement_account_operation_idx" tableName="account_movement">
+            <column name="account_id"/>
+            <column name="operation"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="account_movement"
+                                 constraintName="fk_account_movement_account"
+                                 referencedColumnNames="id"
+                                 referencedTableName="account"/>
+
+    </changeSet>
+
+</databaseChangeLog>

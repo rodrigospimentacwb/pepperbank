@@ -14,7 +14,7 @@
 
         <createTable tableName="customer">
             <column name="id" type="UUID">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
             <column name="name" type="varchar(100)">
                 <constraints nullable="false"/>
@@ -25,10 +25,7 @@
             <column name="email" type="varchar(125)">
                 <constraints nullable="true"/>
             </column>
-            <column name="TRANSACTION_TYPE" type="varchar(30)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="birthDate" type="date">
+            <column name="birthdate" type="date">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -42,10 +39,6 @@
         <createIndex indexName="customer_cpf_idx" tableName="customer">
             <column name="cpf"/>
         </createIndex>
-
-        <addUniqueConstraint columnNames="id"
-                              constraintName="customer_id_const"
-                              tableName="customer" />
 
     </changeSet>
 
