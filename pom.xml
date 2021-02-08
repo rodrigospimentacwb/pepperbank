@@ -16,11 +16,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>account-manager</module>
-        <module>customer-manager</module>
-        <module>domain</module>
-        <module>repository</module>
-        <module>bank-utils</module>
+        <module>pepperbank-account-manager</module>
+        <module>pepperbank-customer-manager</module>
+        <module>pepperbank-model</module>
+        <module>pepperbank-repository</module>
+        <module>pepperbank-exception-handler</module>
     </modules>
 
     <properties>
@@ -28,11 +28,15 @@
         <maven.compiler.target>8</maven.compiler.target>
         <java.version>1.8</java.version>
         <kotlin.version>1.4.21</kotlin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
-        <spring-boot-starter-log4j.version>2.3.7.RELEASE</spring-boot-starter-log4j.version>
+        <log4j.version>2.14.0</log4j.version>
         <javax-el.version>3.0.0</javax-el.version>
         <postgres.version>42.2.18</postgres.version>
         <spring-boot-validation.version>2.1.6.RELEASE</spring-boot-validation.version>
+        <mockito.version>3.3.3</mockito.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencyManagement>
@@ -70,6 +74,18 @@
                 <artifactId>postgresql</artifactId>
                 <version>${postgres.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -81,6 +97,11 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
     </dependencies>
 
