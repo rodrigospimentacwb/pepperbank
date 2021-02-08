@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
 @EntityScan(basePackages = [
-    "com.pepper.bank.domain.commons"
+    "com.pepper.bank.model.commons"
 ])
 @EnableJpaRepositories(basePackages = [
     "com.pepper.bank.repository.commons"
 ])
 @ComponentScan(basePackages = [
-    "com.pepper.bank.utils.handlers"
+    "com.pepper.bank.utils"
 ])
-class LoadDependencies {
+class CustomerManagerConfiguration {
 }

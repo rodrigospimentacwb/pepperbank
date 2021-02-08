@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="20210802173100" author="rodrigo.pimenta">
+
+        <preConditions>
+            <not>
+                <tableExists tableName="customer"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="customer">
+            <column name="id" type="UUID">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cpf" type="varchar(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(125)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="TRANSACTION_TYPE" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthDate" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="customer_id_idx" tableName="customer">
+            <column name="id"/>
+        </createIndex>
+        <createIndex indexName="customer_name_idx" tableName="customer">
+            <column name="name"/>
+        </createIndex>
+        <createIndex indexName="customer_cpf_idx" tableName="customer">
+            <column name="cpf"/>
+        </createIndex>
+
+        <addUniqueConstraint columnNames="id"
+                              constraintName="customer_id_const"
+                              tableName="customer" />
+
+    </changeSet>
+
+</databaseChangeLog>

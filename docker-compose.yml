@@ -6,7 +6,9 @@ services:
     environment:
       POSTGRES_USER: "root"
       POSTGRES_PASSWORD: "root"
-      POSTGRES_DB: "pepper-bank"
+      POSTGRES_DB: "pepperbank"
+    volumes:
+      - ./docker-init-db.sql:/docker-entrypoint-initdb.d/docker-init-db.sql
     ports:
       - "5432:5432"
     networks:

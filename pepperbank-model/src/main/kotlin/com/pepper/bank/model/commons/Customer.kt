@@ -2,8 +2,10 @@ package com.pepper.bank.model.commons
 
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.validator.constraints.br.CPF
+import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
@@ -22,5 +24,12 @@ data class Customer (
     var name: String = "",
     @field:[CPF(message = "CPF inválido")]
     @Column(name = "cpf", length = 11, nullable = false)
-    var cpf: String = ""
+    var cpf: String = "",
+    @field:[Email(message = "E-mail inválido")]
+    @Column(name = "email", length = 125, nullable = true)
+    var email: String = "",
+    @Column(name = "birthDate", nullable = false)
+    var birthDate: LocalDate? = null,
+    @OneToMany(mappedBy = "customer")
+    var phones:List<Phone>? = null
 )
