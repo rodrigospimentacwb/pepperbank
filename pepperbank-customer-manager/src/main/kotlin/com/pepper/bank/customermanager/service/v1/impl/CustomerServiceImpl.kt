@@ -15,10 +15,7 @@ import javax.validation.Validator
 import javax.validation.ValidatorFactory
 
 @Component
-class CustomerServiceImpl: CustomerService {
-
-    @Autowired
-    lateinit var customerRepository: CustomerRepository
+class CustomerServiceImpl(val customerRepository: CustomerRepository) : CustomerService {
 
     override fun create(customer: Customer): Customer {
         try {

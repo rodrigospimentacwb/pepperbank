@@ -21,6 +21,7 @@
         <module>pepperbank-model</module>
         <module>pepperbank-repository</module>
         <module>pepperbank-exception-handler</module>
+        <module>pepperbank-utils</module>
     </modules>
 
     <properties>

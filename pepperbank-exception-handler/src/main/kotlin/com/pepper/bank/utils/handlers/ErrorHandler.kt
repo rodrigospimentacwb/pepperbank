@@ -2,6 +2,7 @@ package com.pepper.bank.utils.handlers
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.pepper.bank.utils.exception.BadRequestException
+import com.pepper.bank.utils.exception.FormatDateTimeException
 import com.pepper.bank.utils.exception.NotFoundException
 import com.pepper.bank.utils.pojo.ErrorMessage
 import org.apache.logging.log4j.LogManager
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse
 @ControllerAdvice
 class ErrorHandler {
 
-    private val log = LogManager.getLogger(this.javaClass)
+    private val LOG = LogManager.getLogger(this.javaClass)
 
     companion object{
 
@@ -41,7 +42,7 @@ class ErrorHandler {
     fun geralExceptionHandler(request:HttpServletRequest,
                               response: HttpServletResponse,
                               ex: Exception):ResponseEntity<ErrorMessage>{
-        log.error("Exception error: [${ex.message}].", ex)
+        LOG.error("Exception error: [${ex.message}].", ex)
         return when (ex) {
             is JsonParseException-> return jsonParseExceptionHandler(request,response,ex)
             is HttpServerErrorException -> return internalServerErrorExceptionHandler(request,response,ex)
@@ -107,8 +108,7 @@ class ErrorHandler {
 
     fun badRequestExceptionHandler(servletRequest: HttpServletRequest,
                                    servletResponse: HttpServletResponse,
-                                   ex: BadRequestException):
-            ResponseEntity<ErrorMessage>{
+                                   ex: BadRequestException): ResponseEntity<ErrorMessage>{
         return buildReponse(servletRequest,
             ex.javaClass.simpleName,
             ex.message ?: "Invalid send data",
@@ -139,10 +139,19 @@ class ErrorHandler {
         val errors: MutableList<String> = ArrayList()
         ex.getBindingResult().getFieldErrors().forEach{errors.add(it.field + ": " + it.defaultMessage)}
         ex.getBindingResult().getGlobalErrors().forEach{errors.add(it.objectName + ": " + it.defaultMessage)}
-        log.error("Fields: [${errors.toString()}].")
+        LOG.error("Fields: [${errors.toString()}].")
         return buildReponse(servletRequest,
             ex.javaClass.simpleName,
             errors.toString(),
+            HttpStatus.BAD_REQUEST)
+    }
+
+    fun formatDateTimeExceptionHandler(servletRequest:HttpServletRequest,
+                                       servletResponse: HttpServletResponse,
+                                       ex: FormatDateTimeException):ResponseEntity<ErrorMessage>{
+        return buildReponse(servletRequest,
+            ex.javaClass.simpleName,
+            ex.message ?: "Fail to convert String to LocalDate",
             HttpStatus.BAD_REQUEST)
     }
 }
