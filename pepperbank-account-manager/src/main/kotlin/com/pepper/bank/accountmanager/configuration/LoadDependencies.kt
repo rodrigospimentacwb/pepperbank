@@ -5,11 +5,15 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
-@EntityScan(basePackages = [
-    "com.pepper.bank.domain.commons"
-])
-@EnableJpaRepositories(basePackages = [
-    "com.pepper.bank.repository.commons"
-])
+@EntityScan(
+    basePackages = [
+        "com.pepper.bank.domain.commons"
+    ]
+)
+@EnableJpaRepositories(
+    basePackages = [
+        "com.pepper.bank.repository.commons"
+    ]
+)
 class LoadDependencies {
 }

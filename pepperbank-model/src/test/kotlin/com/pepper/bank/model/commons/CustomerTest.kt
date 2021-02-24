@@ -11,22 +11,22 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(SpringRunner::class)
 class CustomerTest {
 
-    companion object{
+    companion object {
 
         @TestConfiguration
-        open class CustomerTestConfiguration(){
+        open class CustomerTestConfiguration() {
             @Bean
-            fun customer():Customer{
+            fun customer(): Customer {
                 return Customer()
             }
         }
 
         @Autowired
-        lateinit var customer:Customer
+        lateinit var customer: Customer
     }
 
     @Test
-    fun `should receive an instance with null id`(){
+    fun `should receive an instance with null id`() {
         customer = Customer()
         Assertions.assertTrue(customer.id == null)
     }

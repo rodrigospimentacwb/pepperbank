@@ -11,12 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
 import javax.validation.Valid
-import javax.validation.ConstraintViolation
-import javax.validation.Validation
-import javax.validation.Validator
-import javax.validation.ValidatorFactory
 
 
 @RestController
@@ -27,13 +22,13 @@ class CustomerController {
     lateinit var customerService: CustomerService
 
     @GetMapping("/{id}")
-    fun getCustomerId(@PathVariable id:String): ResponseEntity<Customer> {
-        return ResponseEntity(customerService.getByID(id),HttpStatus.OK)
+    fun getCustomerId(@PathVariable id: String): ResponseEntity<Customer> {
+        return ResponseEntity(customerService.getByID(id), HttpStatus.OK)
     }
 
     @PostMapping
     fun getCustomerId(@Valid @RequestBody customer: Customer): ResponseEntity<Customer> {
-        return ResponseEntity(customerService.create(customer),HttpStatus.OK)
+        return ResponseEntity(customerService.create(customer), HttpStatus.OK)
     }
 
 }

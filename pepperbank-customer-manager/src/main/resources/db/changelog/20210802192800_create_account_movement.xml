@@ -14,7 +14,7 @@
 
         <createTable tableName="account_movement">
             <column name="id" type="UUID">
-                <constraints nullable="false" unique="true" primaryKey="true" />
+                <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
             <column name="account_id" type="uuid">
                 <constraints nullable="false"/>
@@ -26,7 +26,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="decimal(12, 2)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
         </createTable>
 

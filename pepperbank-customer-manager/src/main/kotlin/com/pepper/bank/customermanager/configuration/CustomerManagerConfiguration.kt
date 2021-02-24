@@ -6,14 +6,20 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
-@EntityScan(basePackages = [
-    "com.pepper.bank.model.commons"
-])
-@EnableJpaRepositories(basePackages = [
-    "com.pepper.bank.repository.commons"
-])
-@ComponentScan(basePackages = [
-    "com.pepper.bank.utils"
-])
+@EntityScan(
+    basePackages = [
+        "com.pepper.bank.model.commons"
+    ]
+)
+@EnableJpaRepositories(
+    basePackages = [
+        "com.pepper.bank.repository.commons"
+    ]
+)
+@ComponentScan(
+    basePackages = [
+        "com.pepper.bank.handler"
+    ]
+)
 class CustomerManagerConfiguration {
 }

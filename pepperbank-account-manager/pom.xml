@@ -19,12 +19,15 @@
         <dependency>
             <groupId>com.pepper.bank</groupId>
             <artifactId>pepperbank-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.pepper.bank</groupId>
             <artifactId>pepperbank-exception-handler</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- DEPENDENCIAS EXTERNAS -->
         <!-- DEPENDENCIAS EXTERNAS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -48,6 +51,14 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
 

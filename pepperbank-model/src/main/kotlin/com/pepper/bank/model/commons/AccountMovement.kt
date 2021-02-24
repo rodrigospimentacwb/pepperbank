@@ -1,18 +1,21 @@
 package com.pepper.bank.model.commons
 
 import org.hibernate.annotations.GenericGenerator
-import org.hibernate.validator.constraints.br.CPF
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.*
-import javax.persistence.*
-import javax.validation.constraints.NotBlank
+import java.util.UUID
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.Table
 import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
 
 @Entity
 @Table(name = "account_movement")
-data class AccountMovement (
+class AccountMovement(
     @Id
     @field:[NotNull]
     @Column(name = "id", nullable = false)
@@ -21,11 +24,11 @@ data class AccountMovement (
     var id: UUID? = null,
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
-    var account:Account,
-    @Column(name = "operation", length =1, nullable = false)
-    var operation:String,
+    var account: Account,
+    @Column(name = "operation", length = 1, nullable = false)
+    var operation: String,
     @Column(name = "datetime", nullable = false)
-    var dateTime:LocalDateTime,
+    var dateTime: LocalDateTime,
     @Column(name = "amount", nullable = false)
-    var amount:BigDecimal
+    var amount: BigDecimal
 )
