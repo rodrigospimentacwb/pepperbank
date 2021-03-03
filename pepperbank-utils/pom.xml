@@ -32,7 +32,10 @@
             <groupId>com.pepper.bank</groupId>
             <artifactId>pepperbank-exception-handler</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>br.com.caelum.stella</groupId>
+            <artifactId>caelum-stella-core</artifactId>
         </dependency>
     </dependencies>
 
