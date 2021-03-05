@@ -20,8 +20,6 @@ import javax.validation.ValidatorFactory
 @Service
 class CustomerService(val customerRepository: CustomerRepository) {
 
-    private val LOG = LogManager.getLogger(this.javaClass)
-
     @Throws(CustomerValidationException::class)
     fun validateBirthDate(birthDate: LocalDate?) {
         when {
@@ -61,27 +59,41 @@ class CustomerService(val customerRepository: CustomerRepository) {
     @Throws(CustomerValidationException::class)
     fun ifExistsCPF(cpf:String){
         validateCPF(cpf)
-        findByCPF(cpf).orElse(throw CustomerValidationException(MESSAGE.CUSTOMER_CPF_ALREADY_IN_USE))
+        if(findByCPF(cpf).isPresent){
+            throw CustomerValidationException(MESSAGE.CUSTOMER_CPF_ALREADY_IN_USE)
+        }
+    }
+
+    @Throws(CustomerValidationException::class)
+    fun ifExistsId(id:UUID){
+        id?.let {
+            if(findById(it).isPresent){
+                throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
+            }
+        }
+    }
+
+    fun create(customer: Customer): Customer {
+        ifExistsCPF(customer.cpf)
+        customer.id?.let { ifExistsId(it) }
+        validateBirthDate(customer.birthDate)
+        validateName(customer.name)
+        return customerRepository.save(customer);
     }
 
     fun findByCPF(cpf:String): Optional<Customer> = customerRepository.findByCPF(cpf)
 
-    fun create(customer: Customer): Customer {
-        // Criar validações
-        // verificar se ja existe CPF
-        customer.id = null
-        return this.customerRepository.save(customer);
-    }
+    fun findById(id:UUID): Optional<Customer> = customerRepository.findById(id)
 
     fun getByID(id: String): Customer {
         try {
-            return this.customerRepository.findById(UUID.fromString(id))
-                .orElseThrow { NotFoundException("Customer id: $id not found") }
+            var customer = findById(UUID.fromString(id))
+            return if (customer.isPresent) customer.get() else throw NotFoundException("Customer id: $id not found")
         } catch (e: NotFoundException) {
             throw e
         } catch (e: IllegalArgumentException) {
             throw BadRequestException("Invalid format id: $id")
-        } catch (e1: Exception) {
+        } catch (e: Exception) {
             throw RuntimeException()
         }
     }
