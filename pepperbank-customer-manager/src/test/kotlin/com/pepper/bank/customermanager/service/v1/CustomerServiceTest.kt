@@ -173,6 +173,7 @@ class CustomerServiceTest : DefaultTestValues() {
             .`when`(customerRepository.save(Mockito.any(Customer::class.java)))
             .thenReturn(customer)
         var customerSaved = customerService.create(customer)
+        Assert.assertNotNull(customerSaved)
         Assert.assertTrue(ReflectionEquals(customerSaved, "id").matches(customer))
         Mockito.verify(customerRepository,Mockito.times(1)).save(customer)
     }
