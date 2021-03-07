@@ -8,5 +8,5 @@ import java.util.UUID
 
 @Repository
 interface CustomerRepository : CrudRepository<Customer, UUID> {
-    fun findByCPF(cpfValid: String): Optional<Customer>
+    fun findByCpf(cpfValid: String): Optional<Customer>
 }

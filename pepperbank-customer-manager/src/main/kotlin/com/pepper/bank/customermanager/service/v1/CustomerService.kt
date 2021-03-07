@@ -81,7 +81,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
         return customerRepository.save(customer);
     }
 
-    fun findByCPF(cpf:String): Optional<Customer> = customerRepository.findByCPF(cpf)
+    fun findByCPF(cpf:String): Optional<Customer> = customerRepository.findByCpf(cpf)
 
     fun findById(id:UUID): Optional<Customer> = customerRepository.findById(id)
 

@@ -142,14 +142,14 @@ class CustomerServiceTest : DefaultTestValues() {
             expectMessage(MESSAGE.CUSTOMER_CPF_ALREADY_IN_USE)
         }
         var customer = generatedTestCustomer()
-        Mockito.`when`(customerRepository.findByCPF(customer.cpf)).thenReturn(Optional.of(customer))
+        Mockito.`when`(customerRepository.findByCpf(customer.cpf)).thenReturn(Optional.of(customer))
         customerService.ifExistsCPF(customer.cpf)
     }
 
     @Test
     fun `should not throw CustomerValidationException if cpf not exists`(){
         var customer = generatedTestCustomer()
-        Mockito.`when`(customerRepository.findByCPF(customer.cpf)).thenReturn(Optional.empty())
+        Mockito.`when`(customerRepository.findByCpf(customer.cpf)).thenReturn(Optional.empty())
         customerService.ifExistsCPF(customer.cpf)
     }
 
