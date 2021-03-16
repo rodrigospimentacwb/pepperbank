@@ -14,10 +14,7 @@
 
         <createTable tableName="phone">
             <column name="id" type="UUID">
-                <constraints nullable="false" unique="true" primaryKey="true"/>
-            </column>
-            <column name="account_id" type="uuid">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true" primaryKey="true" uniqueConstraintName="UNIQ_ID_PHONE"/>
             </column>
             <column name="ddd" type="varchar(2)">
                 <constraints nullable="false"/>

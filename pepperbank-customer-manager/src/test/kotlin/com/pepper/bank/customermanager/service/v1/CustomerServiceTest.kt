@@ -3,9 +3,7 @@ package com.pepper.bank.customermanager.service.v1
 import com.pepper.bank.customermanager.config.TestConfig
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.model.commons.Customer
-import com.pepper.bank.model.commons.Phone
 import com.pepper.bank.repository.commons.CustomerRepository
-import com.pepperbank.utils.converters.DateTimeConverter
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -37,18 +35,9 @@ class CustomerServiceTest : DefaultTestValues() {
     @JvmField
     var expectedEx: ExpectedException = ExpectedException.none()
 
-    private fun generatedTestCustomer(): Customer = Customer(cpf = CPF_VALID,
-        email = EMAIL,
-        name = NAME,
-        birthDate = DateTimeConverter.convertStringToLocalDate(Companion.BIRTHDATE),
-        phones = arrayListOf<Phone>(
-            Phone(Companion.PHONE_1_DDD, PHONE_1_NUMBER),
-            Phone(PHONE_2_DDD, PHONE_2_NUMBER)
-        ))
-
     @Test
     fun `should validate the date of birth`() {
-        var customer = generatedTestCustomer()
+        var customer = generatedTestCustomerDefault()
         customerService.validateBirthDate(customer.birthDate)
     }
 
@@ -72,7 +61,7 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should validate customer name`() {
-        var customer = generatedTestCustomer()
+        var customer = generatedTestCustomerDefault()
         customerService.validateName(customer.name)
     }
 
@@ -141,14 +130,14 @@ class CustomerServiceTest : DefaultTestValues() {
             expect(CustomerValidationException::class.java)
             expectMessage(MESSAGE.CUSTOMER_CPF_ALREADY_IN_USE)
         }
-        var customer = generatedTestCustomer()
+        var customer = generatedTestCustomerDefault()
         Mockito.`when`(customerRepository.findByCpf(customer.cpf)).thenReturn(Optional.of(customer))
         customerService.ifExistsCPF(customer.cpf)
     }
 
     @Test
     fun `should not throw CustomerValidationException if cpf not exists`(){
-        var customer = generatedTestCustomer()
+        var customer = generatedTestCustomerDefault()
         Mockito.`when`(customerRepository.findByCpf(customer.cpf)).thenReturn(Optional.empty())
         customerService.ifExistsCPF(customer.cpf)
     }
@@ -160,7 +149,7 @@ class CustomerServiceTest : DefaultTestValues() {
             expectMessage(MESSAGE.CUSTOMER_ID_INVALID)
         }
         val id:UUID = UUID.randomUUID()
-        var customer = generatedTestCustomer()
+        var customer = generatedTestCustomerDefault()
         customer.id = id
         Mockito.`when`(customerRepository.findById(id)).thenReturn(Optional.of(customer))
         customerService.ifExistsId(id)
@@ -168,7 +157,7 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should save client`() {
-        var customer = generatedTestCustomer()
+        var customer = generatedTestCustomerDefault()
         Mockito
             .`when`(customerRepository.save(Mockito.any(Customer::class.java)))
             .thenReturn(customer)

@@ -14,7 +14,7 @@
 
         <createTable tableName="account_movement">
             <column name="id" type="UUID">
-                <constraints nullable="false" unique="true" primaryKey="true"/>
+                <constraints nullable="false" unique="true" primaryKey="true" uniqueConstraintName="UNIQ_ID_ACCOUNT_MOVEMENT"/>
             </column>
             <column name="account_id" type="uuid">
                 <constraints nullable="false"/>
