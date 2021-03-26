@@ -1,3 +1,6 @@
+DELETE FROM phone;
+DELETE FROM customer;
+
 INSERT INTO pepperbank.customer (id, name, cpf, email, birthdate) VALUES('57d0169a-587f-4971-b603-8b7c3fe52739', 'Galileu Galilei', '44265852017', 'galileu.galilei@astronomia.org', '1984-03-08');
 INSERT INTO pepperbank.customer (id, name, cpf, email, birthdate) VALUES('55da4b84-b983-49d2-8844-b61ff7c679a2', 'Isaac Newton', '17193944070', 'isaac.newton@gravitacao.com', '1990-06-07');
 

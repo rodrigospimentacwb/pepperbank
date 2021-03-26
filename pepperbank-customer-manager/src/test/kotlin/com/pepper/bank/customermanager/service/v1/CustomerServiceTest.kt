@@ -166,4 +166,17 @@ class CustomerServiceTest : DefaultTestValues() {
         Assert.assertTrue(ReflectionEquals(customerSaved, "id").matches(customer))
         Mockito.verify(customerRepository,Mockito.times(1)).save(customer)
     }
+
+    @Test
+    fun `should validate if the cpf has been changed`() {
+        with(expectedEx) {
+            expect(CustomerValidationException::class.java)
+            expectMessage(MESSAGE.CUSTOMER_CPF_CHANGED)
+        }
+        var customerMock = generatedGalileuCustomer()
+        Mockito.`when`(customerMock.id?.let { customerRepository.findById(it) }).thenReturn(Optional.of(customerMock))
+        var customer = generatedGalileuCustomer()
+        customer.cpf = "01234567890"
+        customerService.validateChangeCPF(customer)
+    }
 }

@@ -3,6 +3,7 @@ package com.pepper.bank.customermanager.service.v1
 import com.pepper.bank.customermanager.config.TestConfig
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.model.commons.Customer
+import com.pepper.bank.repository.commons.CustomerRepository
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -10,6 +11,8 @@ import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.*
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -23,10 +26,13 @@ import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companio
 @DataJpaTest
 @TestPropertySource("/application-test.properties")
 @SqlGroup(
-        Sql("/load-database.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        Sql("/clean-database.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD))
+        Sql("/load-database.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD))
+@AutoConfigureTestDatabase(replace= Replace.NONE)
 @ContextConfiguration(classes = [TestConfig::class])
 class CustomerServiceTestIT : DefaultTestValues() {
+
+    @Autowired
+    lateinit var customerRepository: CustomerRepository
 
     @Autowired
     lateinit var customerService: CustomerService
@@ -92,11 +98,11 @@ class CustomerServiceTestIT : DefaultTestValues() {
     }
 
     @Test
-    fun `should able to save a customer and search for him`() {
+    fun `should be able to save a customer, search for it and delete it if not associate with an account`() {
 
         var marieCurie:Customer = generatedCurieCustomer()
         marieCurie.id = null
-        customerService.create(marieCurie)
+        marieCurie = customerService.create(marieCurie)
         var marieCurieFoundCPF:Optional<Customer> = customerService.findByCPF(marieCurie.cpf)
         var marieCurieFoundID:Optional<Customer> = marieCurie.id?.let { customerService.findById(it) } ?: run { Optional.empty()}
 
@@ -105,5 +111,175 @@ class CustomerServiceTestIT : DefaultTestValues() {
         Assert.assertTrue(ReflectionEquals(marieCurie,"phones","id").matches(marieCurieFoundCPF.get()))
         Assert.assertTrue(ReflectionEquals(marieCurie,"phones","id").matches(marieCurieFoundID.get()))
         Assert.assertTrue(ReflectionEquals(marieCurieFoundCPF.get(),"phones").matches(marieCurieFoundID.get()))
+        customerService.delete(marieCurie)
+        marieCurieFoundCPF = customerService.findByCPF(marieCurie.cpf)
+        Assert.assertFalse(marieCurieFoundCPF.isPresent);
+    }
+
+    @Test
+    fun `should allow editing customer`() {
+        var newEmail:String = "changed.email@test.com"
+        var gallileu:Customer = generatedGalileuCustomer()
+        var gallileuFound:Optional<Customer> = gallileu.id?.let { customerService.findById(it) } ?: run { Optional.empty()}
+        gallileuFound.get().email = newEmail
+        customerService.update(gallileuFound.get())
+        var gallileuFoundAltered:Optional<Customer> = gallileu.id?.let { customerService.findById(it) } ?: run { Optional.empty()}
+        Assert.assertEquals(gallileuFoundAltered.get().email,newEmail)
+    }
+
+    @Test
+    fun `should must not allow alteration of CPF`() {
+//        with(expectedEx) {
+//            expect(CustomerValidationException::class.java)
+//            expectMessage(MESSAGE.CUSTOMER_CPF_CHANGED)
+//        }
+        var gallileu:Customer = generatedGalileuCustomer()
+
+
+        var gallileuFound:Optional<Customer> = customerRepository.findByCpf(gallileu.cpf)
+        var gallileuFound2:Optional<Customer> = customerRepository.findByCpf(gallileu.cpf)
+
+        gallileuFound.get().cpf = "01234567890"
+//        customerService.update(gallileuFound.get())
+    }
+
+    @Test
+    fun `deve testar edicao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar exlucao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar exlucao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar inlusao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por nome`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por nome sem nenhum resultado`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por cpf`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por cpf sem nenhum resultado`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por ddd e telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por  ddd + telefone sem nenhum resultado`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por id`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por id sem nenhum resultado`() {
+
+    }
+
+    @Test
+    fun `deve testar filtro de busca pessoa por ddd + telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar api busca cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar api de inclusao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar api de edicao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar api de exclusao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar api de inclusao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar api de edicao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar api de exclusao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de busca de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de edicao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de inclusao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de exclusao de cliente`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de exclusao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de inclusao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve testar validacao de chamada da api de edicao de telefone`() {
+
+    }
+
+    @Test
+    fun `deve subir erro se exlucao de cliente com conta`() {
+
     }
 }

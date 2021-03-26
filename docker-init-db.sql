@@ -13,12 +13,12 @@ END IF;
 NOT EXISTS (
       SELECT
       FROM   pg_catalog.pg_database
-      WHERE  datname = 'pepperbank') THEN
+      WHERE  datname = 'dtbasepepper') THEN
       CREATE
-DATABASE pepperbank;
+DATABASE dtbasepepper;
 END IF;
    GRANT ALL PRIVILEGES ON DATABASE
-pepperbank TO root;
+dtbasepepper TO root;
 CREATE SCHEMA IF NOT EXISTS pepperbank AUTHORIZATION root;
 CREATE
 extension "uuid-ossp";
