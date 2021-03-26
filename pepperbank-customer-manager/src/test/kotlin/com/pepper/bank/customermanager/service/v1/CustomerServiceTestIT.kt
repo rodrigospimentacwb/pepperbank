@@ -32,9 +32,6 @@ import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companio
 class CustomerServiceTestIT : DefaultTestValues() {
 
     @Autowired
-    lateinit var customerRepository: CustomerRepository
-
-    @Autowired
     lateinit var customerService: CustomerService
 
     @get:Rule
@@ -129,18 +126,13 @@ class CustomerServiceTestIT : DefaultTestValues() {
 
     @Test
     fun `should must not allow alteration of CPF`() {
-//        with(expectedEx) {
-//            expect(CustomerValidationException::class.java)
-//            expectMessage(MESSAGE.CUSTOMER_CPF_CHANGED)
-//        }
-        var gallileu:Customer = generatedGalileuCustomer()
-
-
-        var gallileuFound:Optional<Customer> = customerRepository.findByCpf(gallileu.cpf)
-        var gallileuFound2:Optional<Customer> = customerRepository.findByCpf(gallileu.cpf)
-
-        gallileuFound.get().cpf = "01234567890"
-//        customerService.update(gallileuFound.get())
+        with(expectedEx) {
+            expect(CustomerValidationException::class.java)
+            expectMessage(MESSAGE.CUSTOMER_CPF_CHANGED)
+        }
+        var gallileu:Optional<Customer> = customerService.findByCPF(DefaultTestValues.GALILEU_CPF)
+        gallileu.get().cpf = "01234567890"
+        customerService.update(gallileu.get())
     }
 
     @Test

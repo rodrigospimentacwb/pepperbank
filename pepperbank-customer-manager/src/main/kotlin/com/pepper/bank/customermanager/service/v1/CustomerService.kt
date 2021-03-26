@@ -39,7 +39,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
 
     @Throws(CustomerValidationException::class, NotFoundException::class)
     fun validateChangeCPF(customer:Customer) {
-        var customerFound:Optional<Customer> = customer.id?.let { customerRepository.findById(it) } as Optional<Customer>
+        var customerFound:Optional<Customer> = customerRepository.findByCpf(customer.cpf)
         when {
             !customerFound.isPresent -> {
                 throw NotFoundException("Customer id: ${customer.id} not found") }
