@@ -23,7 +23,6 @@ services:
       - "8081:80"
     depends_on:
       - teste-postgres-compose
-      - prod-postgres-compose
     networks:
       - postgres-compose-network
 
