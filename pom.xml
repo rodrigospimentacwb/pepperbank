@@ -39,7 +39,6 @@
         <mockito.version>3.3.3</mockito.version>
         <junit.version>4.12</junit.version>
         <liquibase-core.version>4.2.2</liquibase-core.version>
-        <h2-database.version>1.4.200</h2-database.version>
         <caellum-stella-core.version>2.1.2</caellum-stella-core.version>
     </properties>
 
@@ -94,13 +93,6 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
                 <version>${liquibase-core.version}</version>
-            </dependency>
-            <!--Banco de dados para testes-->
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2-database.version}</version>
-                <scope>test</scope>
             </dependency>
             <!--Validação de CPF-->
             <dependency>

@@ -1,15 +1,9 @@
 package com.pepper.bank.customermanager.config
 
-import org.h2.tools.Server
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import java.sql.SQLException
-
-import org.junit.jupiter.api.BeforeAll
-
-
 
 
 @Configuration
