@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
+import javax.transaction.Transactional
 import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companion as MESSAGE
 
 
@@ -39,7 +40,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
 
     @Throws(CustomerValidationException::class, NotFoundException::class)
     fun validateChangeCPF(customer:Customer) {
-        var customerFound:Optional<Customer> = customerRepository.findByCpf(customer.cpf)
+        var customerFound:Optional<Customer> = customer.id?.let { customerRepository.findById(it) } ?: run { Optional.empty()}
         when {
             !customerFound.isPresent -> {
                 throw NotFoundException("Customer id: ${customer.id} not found") }
@@ -100,6 +101,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
         }
     }
 
+    @Transactional
     fun create(customer: Customer): Customer {
         ifExistsCPF(customer.cpf)
         customer.id?.let { ifExistsId(it) }
@@ -108,6 +110,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
         return customerRepository.save(customer);
     }
 
+    @Transactional
     fun update(customer: Customer): Customer {
         validateChangeCPF(customer)
         validateBirthDate(customer.birthDate)
@@ -115,6 +118,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
         return customerRepository.save(customer);
     }
 
+    @Transactional
     fun delete(customer: Customer) {
         try {
             customerRepository.delete(customer)
