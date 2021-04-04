@@ -2,21 +2,28 @@ package com.pepper.bank.handler.handlers
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.pepper.bank.handler.exception.BadRequestException
+import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.FormatDateTimeException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.handler.pojo.ErrorMessage
 import org.apache.logging.log4j.LogManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.client.HttpServerErrorException
+import java.lang.reflect.UndeclaredThrowableException
 import java.time.LocalDateTime
 import java.util.ArrayList
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import java.nio.charset.StandardCharsets
+
 
 @ControllerAdvice
 class ErrorHandler {
@@ -31,6 +38,8 @@ class ErrorHandler {
             message: String,
             status: HttpStatus
         ): ResponseEntity<ErrorMessage> {
+            val httpHeaders = HttpHeaders()
+            httpHeaders.add("Content-Type","application/json; charset=utf-8")
             return ResponseEntity(
                 ErrorMessage(
                     LocalDateTime.now(),
@@ -39,7 +48,7 @@ class ErrorHandler {
                     message,
                     servletRequest.servletPath,
                     servletRequest.method
-                ), status
+                ), httpHeaders, status
             )
         }
     }
@@ -54,18 +63,20 @@ class ErrorHandler {
         return when (ex) {
             is JsonParseException -> return jsonParseExceptionHandler(request, response, ex)
             is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, response, ex)
-            is RuntimeException -> return runtimeExceptionHandler(request, response, ex)
-            is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(
-                request,
-                response,
-                ex
-            )
             is NotFoundException -> return notFoundExceptionHandler(request, response, ex)
             is BadRequestException -> return badRequestExceptionHandler(request, response, ex)
             is NullPointerException -> return nullPointerExceptionHandler(request, response, ex)
             is IllegalArgumentException -> return illegalArgumentExceptionHandler(request, response, ex)
             is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(request, response, ex)
             is FormatDateTimeException -> return formatDateTimeExceptionHandler(request, response, ex)
+            is CustomerValidationException -> return customerValidationExceptionHandler(request, response, ex)
+            is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, response, ex)
+            is RuntimeException -> return runtimeExceptionHandler(request, response, ex)
+            is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(
+                request,
+                response,
+                ex
+            )
             else -> buildReponse(
                 request,
                 "Unknown Error",
@@ -73,6 +84,31 @@ class ErrorHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
+    }
+
+    private fun undeclaredThrowableExceptionHandler(
+        servletRequest: HttpServletRequest,
+        servletResponse: HttpServletResponse,
+        ex: UndeclaredThrowableException): ResponseEntity<ErrorMessage> {
+        return buildReponse(
+            servletRequest,
+            ex.javaClass.simpleName,
+            "UndeclaredThrowableException verify method call to add annotation @Throws(Exception.class)",
+            HttpStatus.BAD_REQUEST
+        )
+    }
+
+    private fun customerValidationExceptionHandler(
+        servletRequest: HttpServletRequest,
+        servletResponse: HttpServletResponse,
+        ex: CustomerValidationException
+    ): ResponseEntity<ErrorMessage> {
+        return buildReponse(
+            servletRequest,
+            ex.javaClass.simpleName,
+            ex.message ?: "Fail to convert customer data",
+            HttpStatus.BAD_REQUEST
+        )
     }
 
     fun jsonParseExceptionHandler(

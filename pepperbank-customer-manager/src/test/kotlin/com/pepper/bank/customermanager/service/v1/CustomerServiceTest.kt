@@ -1,6 +1,6 @@
 package com.pepper.bank.customermanager.service.v1
 
-import com.pepper.bank.customermanager.config.TestConfig
+import com.pepper.bank.customermanager.config.v1.TestConfig
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.model.commons.Customer
 import com.pepper.bank.repository.commons.CustomerRepository
@@ -16,8 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
-import java.util.Optional
-import java.util.UUID
+import java.util.*
 import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companion as MESSAGE
 
 
@@ -178,5 +177,23 @@ class CustomerServiceTest : DefaultTestValues() {
         var customer = generatedGalileuCustomer()
         customer.cpf = "01234567890"
         customerService.validateChangeCPF(customer)
+    }
+
+    @Test
+    fun `should generate new UUID to customer`(){
+        Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.empty())
+        var uuid: UUID = customerService.generateNewCustomerUUID()
+        println("UUID generated: $uuid")
+    }
+
+    @Test
+    fun `should throw an exception if the maximum number of attempts to generate the new UUID exceeds 10`(){
+        with(expectedEx) {
+            expect(CustomerValidationException::class.java)
+            expectMessage(MESSAGE.CUSTOMER_ID_INVALID)
+        }
+        var customerMock = generatedGalileuCustomer()
+        Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.of(customerMock))
+        var uuid: UUID = customerService.generateNewCustomerUUID()
     }
 }

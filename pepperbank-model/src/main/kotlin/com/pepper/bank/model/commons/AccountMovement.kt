@@ -1,5 +1,6 @@
 package com.pepper.bank.model.commons
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.GenericGenerator
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -24,6 +25,7 @@ class AccountMovement(
     var id: UUID? = null,
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
+    @JsonIgnore
     var account: Account,
     @Column(name = "operation", length = 1, nullable = false)
     var operation: String,

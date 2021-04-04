@@ -101,10 +101,26 @@ class CustomerService(val customerRepository: CustomerRepository) {
         }
     }
 
+    fun getByCPF(cpf: String): Customer {
+        try {
+            validateCPF(cpf)
+            var customer = findByCPF(cpf)
+            return if (customer.isPresent) customer.get() else throw NotFoundException("Customer cpf: $cpf not found")
+        } catch (e: NotFoundException) {
+            throw e
+        } catch (e1: CustomerValidationException) {
+            throw e1
+        } catch (e2: Exception) {
+            throw RuntimeException()
+        }
+    }
+
     @Transactional
+    @Throws(CustomerValidationException::class, Exception::class)
     fun create(customer: Customer): Customer {
         ifExistsCPF(customer.cpf)
-        customer.id?.let { ifExistsId(it) }
+        customer.id?.let { throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID) }
+        //customer.id = generateNewCustomerUUID()
         validateBirthDate(customer.birthDate)
         validateName(customer.name)
         return customerRepository.save(customer);
@@ -124,6 +140,23 @@ class CustomerService(val customerRepository: CustomerRepository) {
             customerRepository.delete(customer)
         } catch (e: Exception){
             throw CustomerValidationException(MESSAGE.CUSTOMER_DELETE_ERROR)
+        }
+    }
+
+    fun generateNewCustomerUUID():UUID{
+        var contMaxAttempts:Int = 0
+        var uuid: UUID? = null
+        while(true){
+            uuid = UUID.randomUUID();
+            try {
+                ifExistsId(uuid)
+                return uuid
+            } catch (ex: Exception){
+                contMaxAttempts += 1
+                if(contMaxAttempts >= 10){
+                    throw ex
+                }
+            }
         }
     }
 }

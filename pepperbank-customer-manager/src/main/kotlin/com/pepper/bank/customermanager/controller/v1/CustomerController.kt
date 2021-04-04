@@ -22,8 +22,13 @@ class CustomerController {
     lateinit var customerService: CustomerService
 
     @GetMapping("/{id}")
-    fun getCustomerId(@PathVariable id: String): ResponseEntity<Customer> {
+    fun getCustomerById(@PathVariable id: String): ResponseEntity<Customer> {
         return ResponseEntity(customerService.getByID(id), HttpStatus.OK)
+    }
+
+    @GetMapping("cpf/{cpf}")
+    fun getCustomerByCPF(@PathVariable cpf: String): ResponseEntity<Customer> {
+        return ResponseEntity(customerService.getByCPF(cpf), HttpStatus.OK)
     }
 
     @PostMapping

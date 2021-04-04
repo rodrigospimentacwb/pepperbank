@@ -1,5 +1,6 @@
 package com.pepper.bank.model.commons
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
 import java.util.UUID
@@ -28,6 +29,7 @@ class Account(
     var account: String = "",
     @OneToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     var customer: Customer,
     @Column(name = "creation", nullable = false)
     var creation: LocalDateTime = LocalDateTime.now()

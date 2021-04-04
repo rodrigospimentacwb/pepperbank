@@ -1,5 +1,6 @@
 package com.pepper.bank.model.commons
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.GenericGenerator
 import java.util.UUID
 import javax.persistence.Column
@@ -24,6 +25,7 @@ class Phone(
     var phone: String = "",
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     var customer: Customer?
 ) {
 
