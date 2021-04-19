@@ -1,6 +1,6 @@
 package com.pepper.bank.customermanager.service.v1
 
-import com.pepper.bank.customermanager.config.v1.TestConfig
+import com.pepper.bank.customermanager.config.v1.TestsConfig
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.model.commons.Customer
 import com.pepper.bank.repository.commons.CustomerRepository
@@ -21,7 +21,7 @@ import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companio
 
 
 @RunWith(value = SpringRunner::class)
-@ContextConfiguration(classes = [TestConfig::class])
+@ContextConfiguration(classes = [TestsConfig::class])
 class CustomerServiceTest : DefaultTestValues() {
 
     @MockBean
@@ -195,5 +195,13 @@ class CustomerServiceTest : DefaultTestValues() {
         var customerMock = generatedGalileuCustomer()
         Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.of(customerMock))
         var uuid: UUID = customerService.generateNewCustomerUUID()
+    }
+
+    fun deleteCustomerByUUID(uuid: String) {
+        // TODO
+    }
+
+    fun deleteCustomerByUUID(uuid: UUID) {
+        // TODO
     }
 }

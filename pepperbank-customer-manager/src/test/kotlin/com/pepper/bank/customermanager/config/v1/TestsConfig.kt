@@ -12,4 +12,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
                               ,"com.pepper.bank.customermanager.controller"])
 @EntityScan(basePackages = ["com.pepper.bank.model.commons"])
 @EnableJpaRepositories(basePackages = ["com.pepper.bank.repository.commons"])
-class TestConfig
+class TestsConfig

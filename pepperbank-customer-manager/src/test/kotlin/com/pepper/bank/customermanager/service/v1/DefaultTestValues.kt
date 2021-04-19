@@ -37,6 +37,7 @@ open class DefaultTestValues {
         const val CURIE_CPF:String = "95190371018"
         const val CURIE_EMAIL:String = "marie.curie@radio.or"
         const val CURIE_BIRTHDATE:String = "05/08/2000"
+        const val INVALID_UUID:String = "1d15w151d5w5d15w1d"
     }
 
     protected fun generatedTestCustomer(id: UUID?,

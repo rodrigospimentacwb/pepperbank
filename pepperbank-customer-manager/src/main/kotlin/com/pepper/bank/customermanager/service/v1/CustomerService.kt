@@ -120,21 +120,55 @@ class CustomerService(val customerRepository: CustomerRepository) {
     fun create(customer: Customer): Customer {
         ifExistsCPF(customer.cpf)
         customer.id?.let { throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID) }
-        //customer.id = generateNewCustomerUUID()
+        customer.id = generateNewCustomerUUID()
         validateBirthDate(customer.birthDate)
         validateName(customer.name)
+        customer.phones?.forEach(){it.customer = customer}
         return customerRepository.save(customer);
     }
 
     @Transactional
+    @Throws(CustomerValidationException::class, Exception::class)
     fun update(customer: Customer): Customer {
+        if(customer.id == null){
+            throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
+        }
         validateChangeCPF(customer)
         validateBirthDate(customer.birthDate)
         validateName(customer.name)
+        customer.phones?.forEach(){it.customer = customer}
         return customerRepository.save(customer);
     }
 
+    fun deleteCustomerByUUID(uuid: String) {
+        var uuidTransform:UUID? = null
+        try {
+            uuidTransform = UUID.fromString(uuid)
+        }catch (ex: Exception){
+            throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
+        }
+        deleteCustomerByUUID(UUID.fromString(uuid))
+    }
+
     @Transactional
+    @Throws(CustomerValidationException::class, NotFoundException::class)
+    fun deleteCustomerByUUID(uuid: UUID) {
+        try {
+            var customer:Optional<Customer> = findById(uuid)
+            if(customer.isPresent){
+                customerRepository.delete(customer.get())
+            }else{
+                throw NotFoundException("Customer id: $uuid not found")
+            }
+        } catch (ex: NotFoundException){
+            throw ex
+        } catch (e: Exception){
+            throw CustomerValidationException(MESSAGE.CUSTOMER_DELETE_ERROR)
+        }
+    }
+
+    @Transactional
+    @Throws(CustomerValidationException::class)
     fun delete(customer: Customer) {
         try {
             customerRepository.delete(customer)

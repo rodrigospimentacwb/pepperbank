@@ -4,16 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.pepperbank.utils.serializers.LocalDateDeserializer
 import com.pepperbank.utils.serializers.LocalDateSerializer
+import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.validator.constraints.br.CPF
 import java.time.LocalDate
 import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -40,6 +36,6 @@ class Customer(
     @JsonDeserialize(using = LocalDateDeserializer::class)
     @Column(name = "birthdate", nullable = false)
     var birthDate: LocalDate? = null,
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = [(CascadeType.ALL)])
     var phones: List<Phone>? = null
 )

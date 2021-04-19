@@ -1,6 +1,7 @@
 package com.pepper.bank.model.commons
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.GenericGenerator
 import java.util.UUID
 import javax.persistence.Column

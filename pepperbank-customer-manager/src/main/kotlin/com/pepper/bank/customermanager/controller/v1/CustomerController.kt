@@ -5,12 +5,7 @@ import com.pepper.bank.model.commons.Customer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 
@@ -32,8 +27,18 @@ class CustomerController {
     }
 
     @PostMapping
-    fun getCustomerId(@Valid @RequestBody customer: Customer): ResponseEntity<Customer> {
+    fun createCustomer(@Valid @RequestBody customer: Customer): ResponseEntity<Customer> {
         return ResponseEntity(customerService.create(customer), HttpStatus.OK)
     }
 
+    @PutMapping
+    fun updateCustomer(@Valid @RequestBody customer: Customer): ResponseEntity<Customer> {
+        return ResponseEntity(customerService.update(customer), HttpStatus.OK)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteCustomerById(@PathVariable id: String): ResponseEntity<String> {
+        customerService.deleteCustomerByUUID(id)
+        return ResponseEntity(HttpStatus.OK)
+    }
 }
