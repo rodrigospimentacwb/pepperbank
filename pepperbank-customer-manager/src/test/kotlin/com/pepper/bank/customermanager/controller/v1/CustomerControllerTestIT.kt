@@ -1,7 +1,7 @@
 package com.pepper.bank.customermanager.controller.v1
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.pepper.bank.customermanager.config.v1.TestsConfig
+import com.pepper.bank.customermanager.configuration.TestsConfig
 import com.pepper.bank.customermanager.service.v1.CustomerService
 import com.pepper.bank.customermanager.service.v1.DefaultTestValues
 import com.pepper.bank.model.commons.Customer
@@ -19,13 +19,15 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActions
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-
-import org.springframework.test.web.servlet.MvcResult
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 
 
 @RunWith(value = SpringRunner::class)

@@ -1,6 +1,7 @@
 package com.pepper.bank.handler.handlers
 
 import com.fasterxml.jackson.core.JsonParseException
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.pepper.bank.handler.exception.BadRequestException
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.FormatDateTimeException
@@ -72,6 +73,7 @@ class ErrorHandler {
             is CustomerValidationException -> return customerValidationExceptionHandler(request, response, ex)
             is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, response, ex)
             is RuntimeException -> return runtimeExceptionHandler(request, response, ex)
+            is MismatchedInputException -> return mismatchedInputExceptionHandler(request, response, ex)
             is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(
                 request,
                 response,
@@ -201,6 +203,20 @@ class ErrorHandler {
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
+
+    fun mismatchedInputExceptionHandler(
+        servletRequest: HttpServletRequest,
+        servletResponse: HttpServletResponse,
+        ex: MismatchedInputException
+    ): ResponseEntity<ErrorMessage> {
+        return buildReponse(
+            servletRequest,
+            ex.javaClass.simpleName,
+            ex.message ?: "Jackson error",
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
+    }
+
 
     fun illegalArgumentExceptionHandler(
         servletRequest: HttpServletRequest,

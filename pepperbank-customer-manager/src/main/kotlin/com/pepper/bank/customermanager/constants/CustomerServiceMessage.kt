@@ -12,5 +12,6 @@ class CustomerServiceMessage {
         const val CUSTOMER_ID_INVALID = "Customer´s id is invalid"
         const val CUSTOMER_DELETE_ERROR = "Could not delete customer"
         const val CUSTOMER_CPF_CHANGED = "Customer CPF cannot be change"
+        const val NO_CLIENT_FOUND = "No clients found"
     }
 }

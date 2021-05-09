@@ -1,9 +1,9 @@
 package com.pepper.bank.customermanager.service.v1
 
-import com.pepper.bank.customermanager.config.v1.TestsConfig
+import com.pepper.bank.customermanager.configuration.TestsConfig
+import com.pepper.bank.customermanager.repository.CustomerRepository
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.model.commons.Customer
-import com.pepper.bank.repository.commons.CustomerRepository
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test

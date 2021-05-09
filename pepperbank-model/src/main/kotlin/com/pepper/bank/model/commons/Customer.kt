@@ -4,15 +4,19 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.pepperbank.utils.serializers.LocalDateDeserializer
 import com.pepperbank.utils.serializers.LocalDateSerializer
-import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.validator.constraints.br.CPF
 import java.time.LocalDate
 import java.util.UUID
-import javax.persistence.*
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.Table
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 @Entity

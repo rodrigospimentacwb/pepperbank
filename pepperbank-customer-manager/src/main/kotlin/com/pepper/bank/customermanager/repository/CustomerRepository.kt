@@ -1,4 +1,4 @@
-package com.pepper.bank.repository.commons
+package com.pepper.bank.customermanager.repository
 
 import com.pepper.bank.model.commons.Customer
 import org.springframework.data.repository.CrudRepository

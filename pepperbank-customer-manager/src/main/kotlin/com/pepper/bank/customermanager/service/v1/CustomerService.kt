@@ -1,12 +1,11 @@
 package com.pepper.bank.customermanager.service.v1
 
 import br.com.caelum.stella.validation.CPFValidator
+import com.pepper.bank.customermanager.repository.CustomerRepository
 import com.pepper.bank.handler.exception.BadRequestException
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Customer
-import com.pepper.bank.repository.commons.CustomerRepository
-import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.Optional
@@ -17,6 +16,17 @@ import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companio
 
 @Service
 class CustomerService(val customerRepository: CustomerRepository) {
+
+    fun getAll(): List<Customer> {
+        try {
+            var customers:List<Customer> = customerRepository.findAll() as List<Customer>
+            return if (customers.isNotEmpty()) customers else throw NotFoundException(MESSAGE.NO_CLIENT_FOUND)
+        } catch (e: NotFoundException) {
+            throw e
+        } catch (e2: Exception) {
+            throw RuntimeException()
+        }
+    }
 
     @Throws(CustomerValidationException::class)
     fun validateBirthDate(birthDate: LocalDate?) {

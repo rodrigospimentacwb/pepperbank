@@ -19,7 +19,6 @@
         <module>pepperbank-account-manager</module>
         <module>pepperbank-customer-manager</module>
         <module>pepperbank-model</module>
-        <module>pepperbank-repository</module>
         <module>pepperbank-exception-handler</module>
         <module>pepperbank-utils</module>
     </modules>
@@ -40,6 +39,8 @@
         <junit.version>4.12</junit.version>
         <liquibase-core.version>4.2.2</liquibase-core.version>
         <caellum-stella-core.version>2.1.2</caellum-stella-core.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <jackson-datatype-jsr310.version>2.12.3</jackson-datatype-jsr310.version>
     </properties>
 
     <dependencyManagement>
@@ -116,6 +117,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-datatype-jsr310.version}</version>
         </dependency>
     </dependencies>
 

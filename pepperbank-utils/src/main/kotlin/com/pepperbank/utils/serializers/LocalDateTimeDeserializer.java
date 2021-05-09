@@ -21,6 +21,6 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
 
 	@Override
     public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        return LocalDateTime.parse(p.getValueAsString()); // or overloaded with an appropriate format
+        return LocalDateTime.parse(p.getValueAsString());
     }
 }
