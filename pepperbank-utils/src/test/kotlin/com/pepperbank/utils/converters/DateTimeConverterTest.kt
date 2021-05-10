@@ -15,11 +15,6 @@ class DateTimeConverterTest {
     private val INVALID_DATE = "99/99/9999"
     private val INVALID_FORMAT = "YYYY/DD/MM"
 
-    @Before
-    fun setup() {
-
-    }
-
     @Test
     fun `should convert the date to LocalDate with default format`() {
         var date: LocalDate = DateTimeConverter.convertStringToLocalDate(DEFAULT_DATE)
