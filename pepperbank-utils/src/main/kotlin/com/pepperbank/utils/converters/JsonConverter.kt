@@ -90,7 +90,7 @@ class JsonConverter {
 
         @Throws(IOException::class)
         fun <O> copy(source: O): O {
-            return convert(source, source as Class<O>)
+            return convert(source, source!!::class.java)
         }
     }
 }

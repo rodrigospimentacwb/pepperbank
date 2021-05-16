@@ -43,6 +43,4 @@ class DateTimeConverterTest {
     fun `should throw the FormatDateTimeException exception with all invalid parameters`() {
         var date: LocalDate = DateTimeConverter.convertStringToLocalDate(INVALID_DATE, INVALID_FORMAT)
     }
-
-
 }
