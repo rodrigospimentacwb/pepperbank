@@ -99,4 +99,7 @@ open class DefaultTestValues {
             Phone(PHONE_2_DDD, PHONE_2_NUMBER)
         )
     )
+
+    protected fun generateListCustomers(): List<Customer> =
+        listOf(generatedCurieCustomer(),generatedGalileuCustomer(), generatedNewtonCustomer())
 }

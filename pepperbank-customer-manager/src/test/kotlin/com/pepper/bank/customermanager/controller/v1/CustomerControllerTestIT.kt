@@ -247,4 +247,9 @@ class CustomerControllerTestIT : DefaultTestValues() {
             .andExpect(jsonPath("$.error").value("CustomerValidationException"))
             .andExpect(jsonPath("$.message").value("Customer´s id is invalid"))
     }
+
+    @Test
+    fun `should get all customers`(){
+
+    }
 }

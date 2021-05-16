@@ -3,12 +3,14 @@ package com.pepper.bank.customermanager.service.v1
 import com.pepper.bank.customermanager.configuration.TestsConfig
 import com.pepper.bank.customermanager.repository.CustomerRepository
 import com.pepper.bank.handler.exception.CustomerValidationException
+import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Customer
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import org.springframework.beans.factory.annotation.Autowired
@@ -197,11 +199,57 @@ class CustomerServiceTest : DefaultTestValues() {
         var uuid: UUID = customerService.generateNewCustomerUUID()
     }
 
-    fun deleteCustomerByUUID(uuid: String) {
-        // TODO
+    @Test
+    fun `should get all customers`(){
+        Mockito.`when`(customerRepository.findAll()).thenReturn(generateListCustomers())
+        var customers:List<Customer> = customerService.getAll()
+        Assert.assertEquals(3,customers.size)
     }
 
-    fun deleteCustomerByUUID(uuid: UUID) {
-        // TODO
+    @Test
+    fun `should throw exception notFound if get all customers is empty`(){
+        with(expectedEx) {
+            expect(NotFoundException::class.java)
+        }
+        Mockito.`when`(customerRepository.findAll()).thenReturn(emptyList())
+        customerService.getAll()
+    }
+
+    @Test
+    fun `should throw exception if UUID invalid in deleteCustomerByUUID`(){
+        with(expectedEx) {
+            expect(CustomerValidationException::class.java)
+            expectMessage(MESSAGE.CUSTOMER_ID_INVALID)
+        }
+        customerService.deleteCustomerByUUID(INVALID_UUID)
+    }
+
+    @Test
+    fun `should throw exception if UUID not exists in deleteCustomerByUUID`(){
+        var uuid = UUID.randomUUID()
+        with(expectedEx) {
+            expect(NotFoundException::class.java)
+            expectMessage("Customer id: $uuid not found")
+        }
+        Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.empty())
+        customerService.deleteCustomerByUUID(uuid)
+    }
+
+    @Test
+    fun `should deleteCustomerByUUID for String UUID`(){
+        var uuid = UUID.randomUUID()
+        var customer = generatedTestCustomerDefault()
+        Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.of(customer))
+        customerService.deleteCustomerByUUID(uuid.toString())
+        Mockito.verify(customerRepository, Mockito.times(1)).delete(customer);
+    }
+
+    @Test
+    fun `should deleteCustomerByUUID for UUID`(){
+        var uuid = UUID.randomUUID()
+        var customer = generatedTestCustomerDefault()
+        Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.of(customer))
+        customerService.deleteCustomerByUUID(uuid)
+        Mockito.verify(customerRepository, Mockito.times(1)).delete(customer);
     }
 }
