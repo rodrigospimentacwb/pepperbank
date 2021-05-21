@@ -87,10 +87,8 @@ class CustomerService(val customerRepository: CustomerRepository) {
 
     @Throws(CustomerValidationException::class)
     fun ifExistsId(id:UUID){
-        id?.let {
-            if(findById(it).isPresent){
-                throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
-            }
+        if(findById(id).isPresent){
+            throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
         }
     }
 
@@ -151,9 +149,8 @@ class CustomerService(val customerRepository: CustomerRepository) {
     }
 
     fun deleteCustomerByUUID(uuid: String) {
-        var uuidTransform:UUID? = null
         try {
-            uuidTransform = UUID.fromString(uuid)
+            UUID.fromString(uuid)
         }catch (ex: Exception){
             throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
         }
@@ -189,9 +186,9 @@ class CustomerService(val customerRepository: CustomerRepository) {
 
     fun generateNewCustomerUUID():UUID{
         var contMaxAttempts:Int = 0
-        var uuid: UUID? = null
+        var uuid: UUID?
         while(true){
-            uuid = UUID.randomUUID();
+            uuid = UUID.randomUUID()
             try {
                 ifExistsId(uuid)
                 return uuid

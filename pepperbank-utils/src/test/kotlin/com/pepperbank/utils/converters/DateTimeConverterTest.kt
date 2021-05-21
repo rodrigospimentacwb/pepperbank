@@ -31,16 +31,16 @@ class DateTimeConverterTest {
 
     @Test(expected = FormatDateTimeException::class)
     fun `should throw FormatDateTimeException exception with invalid date`() {
-        var date: LocalDate = DateTimeConverter.convertStringToLocalDate(INVALID_DATE, CUSTOM_FORMAT)
+        DateTimeConverter.convertStringToLocalDate(INVALID_DATE, CUSTOM_FORMAT)
     }
 
     @Test(expected = FormatDateTimeException::class)
     fun `should throw FormatDateTimeException exception with invalid format`() {
-        var date: LocalDate = DateTimeConverter.convertStringToLocalDate(DEFAULT_DATE, INVALID_FORMAT)
+        DateTimeConverter.convertStringToLocalDate(DEFAULT_DATE, INVALID_FORMAT)
     }
 
     @Test(expected = FormatDateTimeException::class)
     fun `should throw the FormatDateTimeException exception with all invalid parameters`() {
-        var date: LocalDate = DateTimeConverter.convertStringToLocalDate(INVALID_DATE, INVALID_FORMAT)
+        DateTimeConverter.convertStringToLocalDate(INVALID_DATE, INVALID_FORMAT)
     }
 }

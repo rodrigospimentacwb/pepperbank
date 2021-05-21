@@ -19,7 +19,7 @@
             <column name="agency" type="varchar(5)">
                 <constraints nullable="false"/>
             </column>
-            <column name="account" type="varchar(10)">
+            <column name="number" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
             <column name="customer_id" type="uuid">
@@ -41,11 +41,11 @@
             <column name="account"/>
         </createIndex>
 
-        <addForeignKeyConstraint baseColumnNames="customer_id"
-                                 baseTableName="account"
-                                 constraintName="fk_account_customer"
-                                 referencedColumnNames="id"
-                                 referencedTableName="customer"/>
+        <addUniqueConstraint
+                columnNames="agency,account"
+                constraintName="agency_account_unique"
+                tableName="account"
+        />
 
     </changeSet>
 

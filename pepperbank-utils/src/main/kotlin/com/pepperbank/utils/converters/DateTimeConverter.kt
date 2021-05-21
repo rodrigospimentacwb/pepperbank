@@ -9,7 +9,7 @@ class DateTimeConverter {
 
     companion object {
 
-        private val LOG = LogManager.getLogger(this.javaClass)
+        private val LOG = LogManager.getLogger(this::class.java)
 
         const val DATE_DEFAULT_FORMAT = "dd/MM/yyyy"
 

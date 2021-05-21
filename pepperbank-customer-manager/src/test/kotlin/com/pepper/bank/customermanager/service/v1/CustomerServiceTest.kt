@@ -196,7 +196,7 @@ class CustomerServiceTest : DefaultTestValues() {
         }
         var customerMock = generatedGalileuCustomer()
         Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.of(customerMock))
-        var uuid: UUID = customerService.generateNewCustomerUUID()
+        customerService.generateNewCustomerUUID()
     }
 
     @Test

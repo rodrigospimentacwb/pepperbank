@@ -21,6 +21,7 @@
         <module>pepperbank-model</module>
         <module>pepperbank-exception-handler</module>
         <module>pepperbank-utils</module>
+        <module>pepperbank-api</module>
     </modules>
 
     <properties>
@@ -45,6 +46,39 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Modules -->
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-account-manager</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-customer-manager</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-exception-handler</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- External Depencies -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>

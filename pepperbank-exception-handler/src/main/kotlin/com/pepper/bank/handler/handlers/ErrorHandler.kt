@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets
 @ControllerAdvice
 class ErrorHandler {
 
-    private val LOG = LogManager.getLogger(this.javaClass)
+    private val LOG = LogManager.getLogger(this::class.java)
 
     companion object {
 
@@ -62,23 +62,19 @@ class ErrorHandler {
     ): ResponseEntity<ErrorMessage> {
         LOG.error("Exception error: [${ex.message}].", ex)
         return when (ex) {
-            is JsonParseException -> return jsonParseExceptionHandler(request, response, ex)
-            is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, response, ex)
-            is NotFoundException -> return notFoundExceptionHandler(request, response, ex)
-            is BadRequestException -> return badRequestExceptionHandler(request, response, ex)
-            is NullPointerException -> return nullPointerExceptionHandler(request, response, ex)
-            is IllegalArgumentException -> return illegalArgumentExceptionHandler(request, response, ex)
-            is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(request, response, ex)
-            is FormatDateTimeException -> return formatDateTimeExceptionHandler(request, response, ex)
-            is CustomerValidationException -> return customerValidationExceptionHandler(request, response, ex)
-            is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, response, ex)
-            is RuntimeException -> return runtimeExceptionHandler(request, response, ex)
-            is MismatchedInputException -> return mismatchedInputExceptionHandler(request, response, ex)
-            is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(
-                request,
-                response,
-                ex
-            )
+            is JsonParseException -> return jsonParseExceptionHandler(request, ex)
+            is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, ex)
+            is NotFoundException -> return notFoundExceptionHandler(request, ex)
+            is BadRequestException -> return badRequestExceptionHandler(request, ex)
+            is NullPointerException -> return nullPointerExceptionHandler(request, ex)
+            is IllegalArgumentException -> return illegalArgumentExceptionHandler(request, ex)
+            is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(request, ex)
+            is FormatDateTimeException -> return formatDateTimeExceptionHandler(request, ex)
+            is CustomerValidationException -> return customerValidationExceptionHandler(request, ex)
+            is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, ex)
+            is RuntimeException -> return runtimeExceptionHandler(request, ex)
+            is MismatchedInputException -> return mismatchedInputExceptionHandler(request, ex)
+            is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(request,ex)
             else -> buildReponse(
                 request,
                 "Unknown Error",
@@ -90,7 +86,6 @@ class ErrorHandler {
 
     private fun undeclaredThrowableExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: UndeclaredThrowableException): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
@@ -102,7 +97,6 @@ class ErrorHandler {
 
     private fun customerValidationExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: CustomerValidationException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -115,7 +109,6 @@ class ErrorHandler {
 
     fun jsonParseExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: JsonParseException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -128,7 +121,6 @@ class ErrorHandler {
 
     fun internalServerErrorExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: HttpServerErrorException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -141,7 +133,6 @@ class ErrorHandler {
 
     fun runtimeExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: RuntimeException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -154,7 +145,6 @@ class ErrorHandler {
 
     fun httpRequestMethodNotSupportedExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: HttpRequestMethodNotSupportedException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -167,7 +157,6 @@ class ErrorHandler {
 
     fun notFoundExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: NotFoundException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -180,7 +169,6 @@ class ErrorHandler {
 
     fun badRequestExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: BadRequestException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -193,7 +181,6 @@ class ErrorHandler {
 
     fun nullPointerExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: NullPointerException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -206,7 +193,6 @@ class ErrorHandler {
 
     fun mismatchedInputExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: MismatchedInputException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -220,7 +206,6 @@ class ErrorHandler {
 
     fun illegalArgumentExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: IllegalArgumentException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
@@ -233,7 +218,6 @@ class ErrorHandler {
 
     fun methodArgumentNotValidExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: MethodArgumentNotValidException
     ): ResponseEntity<ErrorMessage> {
         val errors: MutableList<String> = ArrayList()
@@ -250,7 +234,6 @@ class ErrorHandler {
 
     fun formatDateTimeExceptionHandler(
         servletRequest: HttpServletRequest,
-        servletResponse: HttpServletResponse,
         ex: FormatDateTimeException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
