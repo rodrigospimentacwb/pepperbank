@@ -19,7 +19,7 @@ class CustomerService(val customerRepository: CustomerRepository) {
 
     fun getAll(): List<Customer> {
         try {
-            var customers:List<Customer> = customerRepository.findAll() as List<Customer>
+            var customers:List<Customer> = customerRepository.findAll().filterIsInstance<Customer>()
             return if (customers.isNotEmpty()) customers else throw NotFoundException(MESSAGE.NO_CLIENT_FOUND)
         } catch (e: NotFoundException) {
             throw e
