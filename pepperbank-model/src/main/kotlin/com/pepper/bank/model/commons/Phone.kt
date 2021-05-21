@@ -30,6 +30,8 @@ class Phone(
     var customer: Customer?
 ) {
 
+    constructor() : this(null,"","",null)
+
     constructor(ddd: String, phone: String) : this(null, ddd, phone, null) {
         ddd.also { this.ddd = it }
         phone.also { this.phone = it }

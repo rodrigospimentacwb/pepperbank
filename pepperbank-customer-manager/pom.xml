@@ -15,6 +15,10 @@
         <!-- Internal Dependencies -->
         <dependency>
             <groupId>com.pepper.bank</groupId>
+            <artifactId>pepperbank-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.pepper.bank</groupId>
             <artifactId>pepperbank-model</artifactId>
         </dependency>
         <dependency>

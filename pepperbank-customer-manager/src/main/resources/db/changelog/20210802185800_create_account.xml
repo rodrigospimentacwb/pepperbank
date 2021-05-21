@@ -38,11 +38,11 @@
         </createIndex>
         <createIndex indexName="account_agency_account_idx" tableName="account">
             <column name="agency"/>
-            <column name="account"/>
+            <column name="number"/>
         </createIndex>
 
         <addUniqueConstraint
-                columnNames="agency,account"
+                columnNames="agency,number"
                 constraintName="agency_account_unique"
                 tableName="account"
         />

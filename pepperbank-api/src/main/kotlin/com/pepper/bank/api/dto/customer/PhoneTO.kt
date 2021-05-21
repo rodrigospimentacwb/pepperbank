@@ -1,4 +1,4 @@
-package com.pepper.bank.customermanager.dto.customer
+package com.pepper.bank.api.dto.customer
 
 import java.util.UUID
 
