@@ -13,5 +13,6 @@ class CustomerServiceMessage {
         const val CUSTOMER_DELETE_ERROR = "Could not delete customer"
         const val CUSTOMER_CPF_CHANGED = "Customer CPF cannot be change"
         const val NO_CLIENT_FOUND = "No clients found"
+        const val FAIL_PARSE_DTO_TO_ENTITY = "Fail to parse json DTO to Entity"
     }
 }

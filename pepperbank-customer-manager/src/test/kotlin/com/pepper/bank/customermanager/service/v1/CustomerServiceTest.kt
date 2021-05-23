@@ -252,4 +252,20 @@ class CustomerServiceTest : DefaultTestValues() {
         customerService.deleteCustomerByUUID(uuid)
         Mockito.verify(customerRepository, Mockito.times(1)).delete(customer);
     }
+
+    @Test
+    fun `should convert customerTO to customer`(){
+        var customer = generatedGalileuCustomer()
+        var parsedCustomer = customerService.toCustomer(generatedGalileuCustomerTO())
+        Assert.assertEquals(customer.id,parsedCustomer.id)
+        Assert.assertEquals(customer.name,parsedCustomer.name)
+        Assert.assertEquals(customer.cpf,parsedCustomer.cpf)
+        Assert.assertEquals(customer.birthDate,parsedCustomer.birthDate)
+        Assert.assertEquals(customer.email,parsedCustomer.email)
+        Assert.assertEquals(customer.phones!!.size,parsedCustomer.phones!!.size)
+        Assert.assertEquals(customer.phones!![0].ddd, parsedCustomer.phones!![0].ddd)
+        Assert.assertEquals(customer.phones!![0].phone, parsedCustomer.phones!![0].phone)
+        Assert.assertEquals(customer.phones!![1].ddd, parsedCustomer.phones!![1].ddd)
+        Assert.assertEquals(customer.phones!![1].phone, parsedCustomer.phones!![1].phone)
+    }
 }

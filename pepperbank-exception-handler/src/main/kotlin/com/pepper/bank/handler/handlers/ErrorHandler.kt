@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets
 @ControllerAdvice
 class ErrorHandler {
 
-    private val LOG = LogManager.getLogger(this::class.java)
+    private val logger = LogManager.getLogger(this::class.java)
 
     companion object {
 
@@ -60,7 +60,7 @@ class ErrorHandler {
         response: HttpServletResponse,
         ex: Exception
     ): ResponseEntity<ErrorMessage> {
-        LOG.error("Exception error: [${ex.message}].", ex)
+        logger.error("Exception error: [${ex.message}].", ex)
         return when (ex) {
             is JsonParseException -> return jsonParseExceptionHandler(request, ex)
             is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, ex)
@@ -223,7 +223,7 @@ class ErrorHandler {
         val errors: MutableList<String> = ArrayList()
         ex.getBindingResult().getFieldErrors().forEach { errors.add(it.field + ": " + it.defaultMessage) }
         ex.getBindingResult().getGlobalErrors().forEach { errors.add(it.objectName + ": " + it.defaultMessage) }
-        LOG.error("Fields: [${errors.toString()}].")
+        logger.error("Fields: [${errors.toString()}].")
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,

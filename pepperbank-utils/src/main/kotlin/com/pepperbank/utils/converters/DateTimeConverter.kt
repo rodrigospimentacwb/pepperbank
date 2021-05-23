@@ -9,14 +9,15 @@ class DateTimeConverter {
 
     companion object {
 
-        private val LOG = LogManager.getLogger(this::class.java)
+        private val logger = LogManager.getLogger(this::class.java)
 
         const val DATE_DEFAULT_FORMAT = "dd/MM/yyyy"
 
         fun convertStringToLocalDate(date: String, format: String = DATE_DEFAULT_FORMAT): LocalDate {
             try {
                 return LocalDate.parse(date, DateTimeFormatter.ofPattern(format))
-            } catch (ex: Exception) {
+            } catch (e: Exception) {
+                logger.error("Fail convert String date $date with format $format to LocalDate", e)
                 throw FormatDateTimeException("Fail convert String date $date with format $format to LocalDate")
             }
         }

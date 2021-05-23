@@ -1,5 +1,7 @@
 package com.pepper.bank.customermanager.service.v1
 
+import com.pepper.bank.api.dto.customer.CustomerTO
+import com.pepper.bank.api.dto.customer.PhoneTO
 import com.pepper.bank.model.commons.Customer
 import com.pepper.bank.model.commons.Phone
 import com.pepperbank.utils.converters.DateTimeConverter
@@ -53,6 +55,20 @@ open class DefaultTestValues {
         birthDate = birthDate,
         phones = phones)
 
+    protected fun generatedTestCustomerTO(id: UUID?,
+                                        cpf:String,
+                                        email:String,
+                                        name:String,
+                                        birthDate:LocalDate?,
+                                        phones:List<PhoneTO>?): CustomerTO = CustomerTO(
+        id = id,
+        cpf = cpf,
+        email = email,
+        name = name,
+        birthDate = birthDate,
+        phones = phones
+    )
+
     protected fun generatedTestCustomerDefault(): Customer = generatedTestCustomer(
         null,
         cpf = CPF_VALID,
@@ -73,6 +89,18 @@ open class DefaultTestValues {
         arrayListOf<Phone>(
             Phone(PHONE_1_DDD, PHONE_1_NUMBER),
             Phone(PHONE_2_DDD, PHONE_2_NUMBER)
+        )
+    )
+
+    protected fun generatedGalileuCustomerTO(): CustomerTO = generatedTestCustomerTO(
+        UUID.fromString(GALILEU_UUID),
+        GALILEU_CPF,
+        GALILEU_EMAIL,
+        GALILEU_NAME,
+        DateTimeConverter.convertStringToLocalDate(GALILEU_BIRTHDATE),
+        arrayListOf<PhoneTO>(
+            PhoneTO(PHONE_1_DDD, PHONE_1_NUMBER),
+            PhoneTO(PHONE_2_DDD, PHONE_2_NUMBER)
         )
     )
 

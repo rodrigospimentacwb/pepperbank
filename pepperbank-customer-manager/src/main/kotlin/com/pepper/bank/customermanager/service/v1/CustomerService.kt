@@ -1,11 +1,14 @@
 package com.pepper.bank.customermanager.service.v1
 
 import br.com.caelum.stella.validation.CPFValidator
+import com.pepper.bank.api.dto.customer.CustomerTO
 import com.pepper.bank.customermanager.repository.CustomerRepository
 import com.pepper.bank.handler.exception.BadRequestException
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Customer
+import com.pepperbank.utils.converters.JsonConverter
+import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.Optional
@@ -16,6 +19,18 @@ import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companio
 
 @Service
 class CustomerService(val customerRepository: CustomerRepository) {
+
+    private val logger = LogManager.getLogger(this::class.java)
+
+    @Throws(CustomerValidationException::class)
+    fun toCustomer(customerTO:CustomerTO): Customer {
+        try {
+            return JsonConverter.convert(customerTO,Customer::class.java)
+        } catch (e:Exception){
+            logger.error("Parse error exception customerTO to customer",e)
+            throw CustomerValidationException(MESSAGE.FAIL_PARSE_DTO_TO_ENTITY)
+        }
+    }
 
     fun getAll(): List<Customer> {
         try {
