@@ -4,7 +4,9 @@ import com.pepper.bank.accountmanager.repository.AccountRepository
 import com.pepper.bank.api.dto.customer.CustomerTO
 import com.pepper.bank.api.v1.CustomerApi
 import com.pepper.bank.handler.exception.AccountValidationException
+import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Account
+import com.pepper.bank.model.commons.Customer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Optional
@@ -14,6 +16,23 @@ import com.pepper.bank.accountmanager.constants.AccountServiceMessage.Companion 
 
 @Service
 class AccountService(val accountRepository: AccountRepository) {
+
+    @Autowired
+    lateinit var customerApi:CustomerApi
+
+    fun getAll(): List<Account> {
+
+        println(findCustomer("4105ff95-561c-4156-b9af-dcbc56638e96").get().name)
+
+        try {
+            var accounts:List<Account> = accountRepository.findAll().filterIsInstance<Account>()
+            return accounts.ifEmpty { throw NotFoundException(MESSAGE.NO_ACCOUNT_FOUND) }
+        } catch (e: NotFoundException) {
+            throw e
+        } catch (e2: Exception) {
+            throw RuntimeException()
+        }
+    }
 
     @Throws(AccountValidationException::class)
     fun ifExistsAgencyAccount(agency:String, account:String){
@@ -64,7 +83,6 @@ class AccountService(val accountRepository: AccountRepository) {
     }
 
     fun findCustomer(id:String): Optional<CustomerTO>{
-        //return Optional.of(customerApi.getCustomerById(id))
-        return Optional.empty()
+        return Optional.of(customerApi.getCustomerById(id))
     }
 }

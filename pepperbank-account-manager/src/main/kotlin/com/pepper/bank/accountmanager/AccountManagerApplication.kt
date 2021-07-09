@@ -1,20 +1,30 @@
 package com.pepper.bank.accountmanager
 
 import com.pepper.bank.accountmanager.service.v1.AccountService
+import org.apache.logging.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.cloud.openfeign.EnableFeignClients
+import java.net.InetAddress
+import javax.annotation.PostConstruct
 
-@EnableFeignClients
 @SpringBootApplication
 class AccountManagerApplication
 
-@Autowired
-lateinit var accountService:AccountService
+private val logger = LogManager.getLogger(AccountManagerApplication::class.java)
 
 fun main(args: Array<String>) {
-    runApplication<AccountManagerApplication>(*args)
+    val app = runApplication<AccountManagerApplication>(*args)
 
-    println(accountService.findCustomer("4105ff95-561c-4156-b9af-dcbc56638e96"));
+    val applicationName = app.environment.getProperty("spring.application.name")
+    val contextPath = app.environment.getProperty("server.servlet.context-path")
+    val port = app.environment.getProperty("server.port")
+    val hostAddress = InetAddress.getLocalHost().hostAddress
+
+    logger.info("""|
+                   |------------------------------------------------------------
+                   |Application '$applicationName' is running! Access URLs:
+                   |   Local:      http://127.0.0.1:$port$contextPath
+                   |   External:   http://$hostAddress:$port$contextPath
+                   |------------------------------------------------------------""".trimMargin())
 }

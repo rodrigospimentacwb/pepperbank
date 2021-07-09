@@ -22,7 +22,7 @@ class Account(
     var id: UUID? = null,
     @Column(name = "agency", length = 5, nullable = false)
     var agency: String = "1234",
-    @Column(name = "account", length = 10, nullable = false)
+    @Column(name = "number", length = 10, nullable = false)
     var accountNumber: String = "",
     @Column(name = "customer_id", nullable = false)
     var customerId: UUID? = null,
