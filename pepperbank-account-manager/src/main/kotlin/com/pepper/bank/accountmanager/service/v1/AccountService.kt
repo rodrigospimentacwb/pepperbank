@@ -1,10 +1,14 @@
 package com.pepper.bank.accountmanager.service.v1
 
 import com.pepper.bank.accountmanager.repository.AccountRepository
+import com.pepper.bank.api.dto.customer.CustomerTO
+import com.pepper.bank.api.v1.CustomerApi
 import com.pepper.bank.handler.exception.AccountValidationException
 import com.pepper.bank.model.commons.Account
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Optional
+import java.util.UUID
 import kotlin.random.Random
 import com.pepper.bank.accountmanager.constants.AccountServiceMessage.Companion as MESSAGE
 
@@ -18,16 +22,15 @@ class AccountService(val accountRepository: AccountRepository) {
         }
     }
 
-//    @Throws(AccountValidationException::class)
-//    fun ifExistsCustomer(customerId:UUID){
-//
-//        if(findByAgencyAndAccount(agency, account).isPresent){
-//            throw AccountValidationException(MESSAGE.AGENCY_ACCOUNT_INVALD)
-//        }
-//    }
+    @Throws(AccountValidationException::class)
+    fun ifExistsCustomer(customerId:UUID){
+        if(!findCustomer(customerId.toString()).isPresent){
+            throw AccountValidationException(MESSAGE.AGENCY_ACCOUNT_INVALD)
+        }
+    }
 
     fun findByAgencyAndAccount(agency:String, account:String): Optional<Account> =
-        accountRepository.findByAgencyAndAccount(agency, account)
+        accountRepository.findByAgencyAndAccountNumber(agency, account)
 
     fun generateNewAccountNumber(agency:String): String {
         var contMaxAttempts:Int = 0
@@ -50,13 +53,18 @@ class AccountService(val accountRepository: AccountRepository) {
     fun validateNewAccount(account:Account){
         when{
             account.agency.isNullOrBlank() -> throw AccountValidationException(MESSAGE.AGENCY_INVALD)
-            account.number.isNullOrBlank() -> throw AccountValidationException(MESSAGE.ACCOUNT_INVALD)
+            account.accountNumber.isNullOrBlank() -> throw AccountValidationException(MESSAGE.ACCOUNT_INVALD)
         }
-        ifExistsAgencyAccount(account.agency, account.number)
+        ifExistsAgencyAccount(account.agency, account.accountNumber)
     }
 
     fun create(account:Account){
         validateNewAccount(account)
 
+    }
+
+    fun findCustomer(id:String): Optional<CustomerTO>{
+        //return Optional.of(customerApi.getCustomerById(id))
+        return Optional.empty()
     }
 }

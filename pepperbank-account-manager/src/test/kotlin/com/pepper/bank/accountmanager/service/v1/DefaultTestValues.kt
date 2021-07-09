@@ -1,9 +1,6 @@
 package com.pepper.bank.accountmanager.service.v1
 
 import com.pepper.bank.model.commons.Account
-import com.pepper.bank.model.commons.Customer
-import com.pepper.bank.model.commons.Phone
-import com.pepperbank.utils.converters.DateTimeConverter
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -22,14 +19,16 @@ open class DefaultTestValues {
     protected fun generateGalileuAccountTest(): Account = Account(
         id = UUID.fromString(ACCOUNT_ID_GALLILEU),
         agency = AGENCY,
-        number = ACCOUNT_NUMBER_GALLILEU,
-        customerId = UUID.fromString(GALILEU_UUID),
-        creation = LocalDateTime.now())
+        accountNumber = ACCOUNT_NUMBER_GALLILEU,
+        creation = LocalDateTime.now(),
+        customerId = UUID.fromString(ACCOUNT_ID_GALLILEU)
+    )
 
     protected fun generateNewtonAccountTest(): Account = Account(
         id = UUID.fromString(ACCOUNT_ID_NEWTON),
         agency = AGENCY,
-        number = ACCOUNT_NUMBER_NEWTON,
-        customerId = UUID.fromString(NEWTON_UUID),
-        creation = LocalDateTime.now())
+        accountNumber = ACCOUNT_NUMBER_NEWTON,
+        creation = LocalDateTime.now(),
+        customerId = UUID.fromString(ACCOUNT_ID_NEWTON)
+    )
 }

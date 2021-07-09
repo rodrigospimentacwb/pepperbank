@@ -8,6 +8,7 @@ import com.pepperbank.utils.converters.JsonConverter
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 
 @RestController
@@ -32,9 +33,9 @@ class CustomerController(
         return JsonConverter.convert(customerService.create(customer),CustomerTO::class.java)
     }
 
-    override fun updateCustomer(customerTO: CustomerTO): CustomerTO {
+    override fun updateCustomer(id: UUID, customerTO: CustomerTO): CustomerTO {
         val customer:Customer = customerService.toCustomer(customerTO)
-        return JsonConverter.convert(customerService.update(customer),CustomerTO::class.java)
+        return JsonConverter.convert(customerService.update(id, customer),CustomerTO::class.java)
     }
 
     override fun deleteCustomerById(id: String) {

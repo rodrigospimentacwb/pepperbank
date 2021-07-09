@@ -9,6 +9,5 @@ import java.util.UUID
 
 @Repository
 interface AccountRepository : CrudRepository<Account, UUID> {
-
-    fun findByAgencyAndAccount(agency:String, account:String): Optional<Account>
+    fun findByAgencyAndAccountNumber(agency:String, account:String): Optional<Account>
 }

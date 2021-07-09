@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.web.HttpMediaTypeNotSupportedException
 import java.nio.charset.StandardCharsets
 
 
@@ -75,6 +76,8 @@ class ErrorHandler {
             is RuntimeException -> return runtimeExceptionHandler(request, ex)
             is MismatchedInputException -> return mismatchedInputExceptionHandler(request, ex)
             is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(request,ex)
+            is HttpMediaTypeNotSupportedException -> return httpMediaTypeNotSupportedExceptionHandler(request,ex)
+
             else -> buildReponse(
                 request,
                 "Unknown Error",
@@ -146,6 +149,18 @@ class ErrorHandler {
     fun httpRequestMethodNotSupportedExceptionHandler(
         servletRequest: HttpServletRequest,
         ex: HttpRequestMethodNotSupportedException
+    ): ResponseEntity<ErrorMessage> {
+        return buildReponse(
+            servletRequest,
+            ex.javaClass.simpleName,
+            ex.message ?: "Request method '" + servletRequest.method + "' not supported",
+            HttpStatus.BAD_REQUEST
+        )
+    }
+
+    fun httpMediaTypeNotSupportedExceptionHandler(
+        servletRequest: HttpServletRequest,
+        ex: HttpMediaTypeNotSupportedException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,

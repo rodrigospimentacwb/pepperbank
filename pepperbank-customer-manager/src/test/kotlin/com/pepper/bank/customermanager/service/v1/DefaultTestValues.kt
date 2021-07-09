@@ -47,7 +47,7 @@ open class DefaultTestValues {
                                         email:String,
                                         name:String,
                                         birthDate:LocalDate?,
-                                        phones:List<Phone>?): Customer = Customer(
+                                        phones:MutableList<Phone>?): Customer = Customer(
         id = id,
         cpf = cpf,
         email = email,
@@ -60,7 +60,7 @@ open class DefaultTestValues {
                                         email:String,
                                         name:String,
                                         birthDate:LocalDate?,
-                                        phones:List<PhoneTO>?): CustomerTO = CustomerTO(
+                                        phones:MutableList<PhoneTO>?): CustomerTO = CustomerTO(
         id = id,
         cpf = cpf,
         email = email,

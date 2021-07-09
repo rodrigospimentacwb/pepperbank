@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.util.Optional
-import java.util.UUID
 import com.pepper.bank.accountmanager.constants.AccountServiceMessage.Companion as MESSAGE
 
 @RunWith(value = SpringRunner::class)
@@ -37,13 +36,13 @@ class AccountServiceTest: DefaultTestValues() {
         }
 
         var account = generateGalileuAccountTest()
-        Mockito.`when`(accountRepository.findByAgencyAndAccount(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.of(account))
+        Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.of(account))
         accountSevice.generateNewAccountNumber(AGENCY)
     }
 
     @Test
     fun `deve gerar numero da conta`() {
-        Mockito.`when`(accountRepository.findByAgencyAndAccount(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
+        Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
         println(accountSevice.generateNewAccountNumber(AGENCY))
     }
 
@@ -53,7 +52,7 @@ class AccountServiceTest: DefaultTestValues() {
             expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
             expectMessage(MESSAGE.AGENCY_INVALD)
         }
-        Mockito.`when`(accountRepository.findByAgencyAndAccount(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
+        Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
         var account = generateGalileuAccountTest()
         account.agency = ""
         accountSevice.validateNewAccount(account)
@@ -65,9 +64,9 @@ class AccountServiceTest: DefaultTestValues() {
             expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
             expectMessage(MESSAGE.ACCOUNT_INVALD)
         }
-        Mockito.`when`(accountRepository.findByAgencyAndAccount(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
+        Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
         var account = generateGalileuAccountTest()
-        account.number = ""
+        account.accountNumber = ""
         accountSevice.validateNewAccount(account)
     }
 

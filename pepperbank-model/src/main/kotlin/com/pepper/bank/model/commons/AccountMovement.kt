@@ -26,11 +26,11 @@ class AccountMovement(
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     @JsonIgnore
-    var account: Account,
+    var account: Account? = null,
     @Column(name = "operation", length = 1, nullable = false)
-    var operation: String,
+    var operation: String = "",
     @Column(name = "datetime", nullable = false)
-    var dateTime: LocalDateTime,
+    var dateTime: LocalDateTime = LocalDateTime.now(),
     @Column(name = "amount", nullable = false)
-    var amount: BigDecimal
+    var amount: BigDecimal = BigDecimal.ZERO
 )

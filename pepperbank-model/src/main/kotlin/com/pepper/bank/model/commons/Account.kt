@@ -23,9 +23,9 @@ class Account(
     @Column(name = "agency", length = 5, nullable = false)
     var agency: String = "1234",
     @Column(name = "account", length = 10, nullable = false)
-    var number: String = "",
+    var accountNumber: String = "",
     @Column(name = "customer_id", nullable = false)
-    var customerId: UUID,
+    var customerId: UUID? = null,
     @Column(name = "creation", nullable = false)
     var creation: LocalDateTime = LocalDateTime.now()
 )

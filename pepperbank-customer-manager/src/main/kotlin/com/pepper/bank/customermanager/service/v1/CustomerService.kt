@@ -152,13 +152,15 @@ class CustomerService(val customerRepository: CustomerRepository) {
 
     @Transactional
     @Throws(CustomerValidationException::class, Exception::class)
-    fun update(customer: Customer): Customer {
-        if(customer.id == null){
+    fun update(id:UUID, customer: Customer): Customer {
+        if(id == null){
             throw CustomerValidationException(MESSAGE.CUSTOMER_ID_INVALID)
         }
+        customer.id = id
         validateChangeCPF(customer)
         validateBirthDate(customer.birthDate)
         validateName(customer.name)
+        customer.phones?.clear()
         customer.phones?.forEach(){it.customer = customer}
         return customerRepository.save(customer);
     }

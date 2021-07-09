@@ -28,7 +28,7 @@ class Customer(
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     var id: UUID? = null,
     @Column(name = "name", length = 100, nullable = false)
-    @field:[NotBlank Size(min = 2, max = 100, message = "Minimo 2 maximo 100 caracteres")]
+    @field:[NotBlank Size(min = 2, max = 100, message = "Minimum 2 maximum 100 characters")]
     var name: String = "",
     @field:[CPF(message = "CPF inválido")]
     @Column(name = "cpf", length = 11, nullable = false)
@@ -41,5 +41,5 @@ class Customer(
     @Column(name = "birthdate", nullable = false)
     var birthDate: LocalDate? = null,
     @OneToMany(mappedBy = "customer", cascade = [(CascadeType.ALL)])
-    var phones: List<Phone>? = null
+    var phones: MutableList<Phone>? = null
 )

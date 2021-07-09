@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
 @ComponentScan(basePackages = ["com.pepper.bank.accountmanager.service"
-                              ,"com.pepper.bank.handler"
-                              ,"com.pepper.bank.accountmanager.controller"])
+                              ,"com.pepper.bank.handler"])
 @EntityScan(basePackages = ["com.pepper.bank.model.commons"])
 @EnableJpaRepositories(basePackages = ["com.pepper.bank.accountmanager.repository"])
 class TestsConfig
