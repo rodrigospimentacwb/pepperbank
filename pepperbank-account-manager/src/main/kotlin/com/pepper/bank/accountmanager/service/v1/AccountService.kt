@@ -21,8 +21,6 @@ class AccountService(val accountRepository: AccountRepository) {
 
     fun getAll(): List<Account> {
 
-        println(findCustomer("aef590ca-140a-44ce-be95-8c0c6d9e6fd7").get().name)
-
         try {
             var accounts:List<Account> = accountRepository.findAll().filterIsInstance<Account>()
             return accounts.ifEmpty { throw NotFoundException(MESSAGE.NO_ACCOUNT_FOUND) }
@@ -78,7 +76,6 @@ class AccountService(val accountRepository: AccountRepository) {
 
     fun create(account:Account){
         validateNewAccount(account)
-
     }
 
     fun findCustomer(id:String): Optional<CustomerTO>{
