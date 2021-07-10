@@ -2,11 +2,10 @@ package com.pepper.bank.accountmanager.service.v1
 
 import com.pepper.bank.accountmanager.repository.AccountRepository
 import com.pepper.bank.api.dto.customer.CustomerTO
-import com.pepper.bank.api.v1.CustomerApi
+import com.pepper.bank.api.customer.v1.CustomerApi
 import com.pepper.bank.handler.exception.AccountValidationException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Account
-import com.pepper.bank.model.commons.Customer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.Optional
@@ -22,7 +21,7 @@ class AccountService(val accountRepository: AccountRepository) {
 
     fun getAll(): List<Account> {
 
-        println(findCustomer("4105ff95-561c-4156-b9af-dcbc56638e96").get().name)
+        println(findCustomer("aef590ca-140a-44ce-be95-8c0c6d9e6fd7").get().name)
 
         try {
             var accounts:List<Account> = accountRepository.findAll().filterIsInstance<Account>()

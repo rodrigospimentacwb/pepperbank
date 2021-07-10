@@ -1,4 +1,4 @@
-package com.pepper.bank.api.v1
+package com.pepper.bank.api.accountManager.v1
 
 import com.pepper.bank.api.dto.account.AccountTO
 import org.springframework.cloud.openfeign.FeignClient

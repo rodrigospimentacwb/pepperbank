@@ -1,12 +1,9 @@
 package com.pepper.bank.accountmanager
 
-import com.pepper.bank.accountmanager.service.v1.AccountService
 import org.apache.logging.log4j.LogManager
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import java.net.InetAddress
-import javax.annotation.PostConstruct
 
 @SpringBootApplication
 class AccountManagerApplication

@@ -1,7 +1,7 @@
 package com.pepper.bank.customermanager.controller.v1
 
 import com.pepper.bank.api.dto.customer.CustomerTO
-import com.pepper.bank.api.v1.CustomerApi
+import com.pepper.bank.api.customer.v1.CustomerApi
 import com.pepper.bank.customermanager.service.v1.CustomerService
 import com.pepper.bank.model.commons.Customer
 import com.pepperbank.utils.converters.JsonConverter

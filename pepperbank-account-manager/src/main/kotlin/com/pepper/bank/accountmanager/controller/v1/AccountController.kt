@@ -2,7 +2,7 @@ package com.pepper.bank.accountmanager.controller.v1
 
 import com.pepper.bank.accountmanager.service.v1.AccountService
 import com.pepper.bank.api.dto.account.AccountTO
-import com.pepper.bank.api.v1.AccountApi
+import com.pepper.bank.api.accountManager.v1.AccountApi
 import com.pepperbank.utils.converters.JsonConverter
 import org.springframework.web.bind.annotation.RestController
 

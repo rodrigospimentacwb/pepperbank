@@ -7,25 +7,20 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @Configuration
-@EntityScan(
-    basePackages = [
+@EntityScan(basePackages = [
         "com.pepper.bank.model.commons"
-    ]
-)
-@EnableJpaRepositories(
-    basePackages = [
+])
+@EnableJpaRepositories(basePackages = [
         "com.pepper.bank.accountmanager.repository"
-    ]
-)
-@ComponentScan(
-    basePackages = [
-        "com.pepper.bank.handler"
-    ]
-)
+])
+@ComponentScan(basePackages = [
+        "com.pepper.bank.handler",
+        "com.pepper.bank.accountmanager.service"
+])
 @EnableFeignClients(
-    basePackages = [
-        "com.pepper.bank.api"
-    ]
+        basePackages = [
+                "com.pepper.bank.api"
+        ]
 )
 class AccountManagerConfiguration {
 }
