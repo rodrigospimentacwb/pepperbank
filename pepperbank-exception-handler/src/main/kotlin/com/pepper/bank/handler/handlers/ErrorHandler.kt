@@ -3,32 +3,27 @@ package com.pepper.bank.handler.handlers
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.pepper.bank.handler.exception.BadRequestException
+import com.pepper.bank.handler.exception.CustomFeignException
 import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.FormatDateTimeException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.handler.pojo.ErrorMessage
+import feign.RetryableException
 import org.apache.logging.log4j.LogManager
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.util.MultiValueMap
+import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.client.HttpServerErrorException
 import java.lang.reflect.UndeclaredThrowableException
 import java.time.LocalDateTime
-import java.util.ArrayList
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
-import org.springframework.web.HttpMediaTypeNotSupportedException
-import java.nio.charset.StandardCharsets
 
-
-@ControllerAdvice
-class ErrorHandler {
+abstract class ErrorHandler {
 
     private val logger = LogManager.getLogger(this::class.java)
 
@@ -41,7 +36,7 @@ class ErrorHandler {
             status: HttpStatus
         ): ResponseEntity<ErrorMessage> {
             val httpHeaders = HttpHeaders()
-            httpHeaders.add("Content-Type","application/json; charset=utf-8")
+            httpHeaders.add("Content-Type", "application/json; charset=utf-8")
             return ResponseEntity(
                 ErrorMessage(
                     LocalDateTime.now(),
@@ -62,34 +57,44 @@ class ErrorHandler {
         ex: Exception
     ): ResponseEntity<ErrorMessage> {
         logger.error("Exception error: [${ex.message}].", ex)
-        return when (ex) {
-            is JsonParseException -> return jsonParseExceptionHandler(request, ex)
-            is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, ex)
-            is NotFoundException -> return notFoundExceptionHandler(request, ex)
-            is BadRequestException -> return badRequestExceptionHandler(request, ex)
-            is NullPointerException -> return nullPointerExceptionHandler(request, ex)
-            is IllegalArgumentException -> return illegalArgumentExceptionHandler(request, ex)
-            is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(request, ex)
-            is FormatDateTimeException -> return formatDateTimeExceptionHandler(request, ex)
-            is CustomerValidationException -> return customerValidationExceptionHandler(request, ex)
-            is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, ex)
-            is RuntimeException -> return runtimeExceptionHandler(request, ex)
-            is MismatchedInputException -> return mismatchedInputExceptionHandler(request, ex)
-            is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(request,ex)
-            is HttpMediaTypeNotSupportedException -> return httpMediaTypeNotSupportedExceptionHandler(request,ex)
+        return customHandler(request, ex)
+            ?: when (ex) {
+                is JsonParseException -> return jsonParseExceptionHandler(request, ex)
+                is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, ex)
+                is NotFoundException -> return notFoundExceptionHandler(request, ex)
+                is BadRequestException -> return badRequestExceptionHandler(request, ex)
+                is NullPointerException -> return nullPointerExceptionHandler(request, ex)
+                is IllegalArgumentException -> return illegalArgumentExceptionHandler(request, ex)
+                is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(request, ex)
+                is FormatDateTimeException -> return formatDateTimeExceptionHandler(request, ex)
+                is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, ex)
+                is RetryableException -> return retryableExceptionHandler(request, ex)
+                is CustomFeignException -> return feignExceptionHandler(request, ex)
+                is MismatchedInputException -> return mismatchedInputExceptionHandler(request, ex)
+                is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(request, ex)
+                is HttpMediaTypeNotSupportedException -> return httpMediaTypeNotSupportedExceptionHandler(request, ex)
+                is RuntimeException -> return runtimeExceptionHandler(request, ex)
 
-            else -> buildReponse(
-                request,
-                "Unknown Error",
-                "Please validate the application logs",
-                HttpStatus.INTERNAL_SERVER_ERROR
-            )
-        }
+                else -> buildReponse(
+                    request,
+                    "Unknown Error",
+                    "Please validate the application logs",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
+            }
+    }
+
+    public open fun customHandler(
+        servletRequest: HttpServletRequest,
+        ex: Exception
+    ): ResponseEntity<ErrorMessage>? {
+        return null
     }
 
     private fun undeclaredThrowableExceptionHandler(
         servletRequest: HttpServletRequest,
-        ex: UndeclaredThrowableException): ResponseEntity<ErrorMessage> {
+        ex: UndeclaredThrowableException
+    ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
@@ -98,14 +103,28 @@ class ErrorHandler {
         )
     }
 
-    private fun customerValidationExceptionHandler(
+    private fun retryableExceptionHandler(
         servletRequest: HttpServletRequest,
-        ex: CustomerValidationException
+        ex: RetryableException
     ): ResponseEntity<ErrorMessage> {
+        var cause = if (ex.cause != null) ex.cause!!.message else "unidentified cause"
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Fail to convert customer data",
+            "Feign request error: $cause'",
+            HttpStatus.BAD_REQUEST
+        )
+    }
+
+    private fun feignExceptionHandler(
+        servletRequest: HttpServletRequest,
+        ex: CustomFeignException
+    ): ResponseEntity<ErrorMessage> {
+        val cause: String = if (ex.cause?.cause != null) ex.cause.cause!!.message.toString() else "unidentified cause"
+        return buildReponse(
+            servletRequest,
+            ex.javaClass.simpleName,
+            "Feign request error: $cause' ${ex.message}",
             HttpStatus.BAD_REQUEST
         )
     }
@@ -165,7 +184,7 @@ class ErrorHandler {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Request method '" + servletRequest.method + "' not supported",
+            ex.message ?: "Media type '" + servletRequest.method + "' not supported",
             HttpStatus.BAD_REQUEST
         )
     }

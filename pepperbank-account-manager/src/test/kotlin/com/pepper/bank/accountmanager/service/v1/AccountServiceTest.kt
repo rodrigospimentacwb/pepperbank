@@ -2,18 +2,19 @@ package com.pepper.bank.accountmanager.service.v1
 
 import com.pepper.bank.accountmanager.configuration.TestsConfig
 import com.pepper.bank.accountmanager.repository.AccountRepository
+import com.pepper.bank.api.customer.v1.CustomerApi
+import com.pepper.bank.api.dto.customer.CustomerTO
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.cloud.openfeign.EnableFeignClients
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.util.Optional
+import java.util.UUID
 import com.pepper.bank.accountmanager.constants.AccountServiceMessage.Companion as MESSAGE
 
 @RunWith(value = SpringRunner::class)
@@ -26,12 +27,15 @@ class AccountServiceTest: DefaultTestValues() {
     @Autowired
     lateinit var accountSevice: AccountService
 
+    @MockBean
+    lateinit var customerApi: CustomerApi
+
     @Rule
     @JvmField
     var expectedEx: ExpectedException = ExpectedException.none()
 
     @Test
-    fun `deve gerar execao se o numero da conta ja existir mais de 10 tentativas`() {
+    fun `should generate exception if the account number already exists more than 10`() {
         with(expectedEx) {
             expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
             expectMessage(MESSAGE.AGENCY_ACCOUNT_INVALD)
@@ -43,13 +47,13 @@ class AccountServiceTest: DefaultTestValues() {
     }
 
     @Test
-    fun `deve gerar numero da conta`() {
+    fun `should generate account number`() {
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
         println(accountSevice.generateNewAccountNumber(AGENCY))
     }
 
     @Test
-    fun `deve validar na criacao de nova conta se foi informado a agencia`() {
+    fun `should validate when creating a new account if the agency has not been informed`() {
         with(expectedEx) {
             expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
             expectMessage(MESSAGE.AGENCY_INVALD)
@@ -61,7 +65,7 @@ class AccountServiceTest: DefaultTestValues() {
     }
 
     @Test
-    fun `deve validar na criacao de nova conta se foi informado o numero da conta`() {
+    fun `should validate when creating a new account if the account number was not informed`() {
         with(expectedEx) {
             expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
             expectMessage(MESSAGE.ACCOUNT_INVALD)
@@ -73,8 +77,22 @@ class AccountServiceTest: DefaultTestValues() {
     }
 
     @Test
-    fun `deve subir excecao caso cliente nao exista`() {
+    fun `deve lancar execao se cliente não encontrado`() {
+//        with(expectedEx) {
+//            expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
+//            expectMessage(MESSAGE.CUSTOMER_NOT_FOUND)
+//        }
+//        val uuidCustomer:UUID = UUID.randomUUID()
+//        Mockito.`when`(customerApi.getCustomerById(uuidCustomer.toString())).thenReturn(null)
+//        accountSevice.ifExistsCustomer(uuidCustomer)
+    }
 
+    @Test
+    fun `should throw exception if customer does not exist`() {
+//        with(expectedEx) {
+//            expect(com.pepper.bank.handler.exception.AccountValidationException::class.java)
+//            expectMessage(MESSAGE.ACCOUNT_INVALD)
+//        }
     }
 
     @Test

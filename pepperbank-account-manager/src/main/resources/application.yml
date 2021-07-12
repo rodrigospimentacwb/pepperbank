@@ -1,0 +1,51 @@
+server:
+    port: 8082
+    servlet:
+        context-path: /account-manager
+
+spring:
+    application:
+        name: pepperbank-account-manager
+    banner:
+        location: classpath:custom-banner.txt
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        hikari:
+            data-source-properties:
+                pool-name: poolpepperbank
+        password: root
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:postgresql://localhost:5432/dtbasepepper
+        username: root
+    jpa:
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                format_sql: true
+        show-sql: true
+    liquibase:
+        change-log: classpath:/db/changelog/db.changelog-master.xml
+        default-schema: pepperbank
+        enabled: true
+
+feign:
+    client:
+        config:
+            customerManager:
+                connect-timeout: 5000
+                read-timeout: 10000
+                #errorDecoder: com.pepper.bank.handler.feign.PepperErrorDecoder
+            default:
+                logger-level: BASIC
+
+
+logging:
+    level:
+        root: INFO
+
+pepper:
+    bank:
+        customer:
+            manager: localhost:8080/customer-manageraass
