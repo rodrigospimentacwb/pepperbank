@@ -13,22 +13,24 @@ import javax.servlet.http.HttpServletRequest
 class ErrorHandler: ErrorHandler() {
 
     override fun customHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: Exception): ResponseEntity<ErrorMessage>? {
         return when (ex) {
-            is CustomerValidationException -> customerValidationExceptionHandler(servletRequest, ex)
+            is CustomerValidationException -> customerValidationExceptionHandler(codeError, servletRequest, ex)
             else -> null
         }
     }
 
     private fun customerValidationExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: CustomerValidationException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Fail in customer-manager",
+            codeError + (ex.message ?: "Fail in customer-manager"),
             HttpStatus.BAD_REQUEST
         )
     }

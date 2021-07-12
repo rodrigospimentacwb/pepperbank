@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.client.HttpServerErrorException
 import java.lang.reflect.UndeclaredThrowableException
 import java.time.LocalDateTime
+import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -56,24 +57,25 @@ abstract class ErrorHandler {
         response: HttpServletResponse,
         ex: Exception
     ): ResponseEntity<ErrorMessage> {
-        logger.error("Exception error: [${ex.message}].", ex)
-        return customHandler(request, ex)
+        val codeError = "Error code: " + UUID.randomUUID() + " ";
+        logger.error("$codeError Exception: [${ex.message}].", ex)
+        return customHandler(codeError, request, ex)
             ?: when (ex) {
-                is JsonParseException -> return jsonParseExceptionHandler(request, ex)
-                is HttpServerErrorException -> return internalServerErrorExceptionHandler(request, ex)
-                is NotFoundException -> return notFoundExceptionHandler(request, ex)
-                is BadRequestException -> return badRequestExceptionHandler(request, ex)
-                is NullPointerException -> return nullPointerExceptionHandler(request, ex)
-                is IllegalArgumentException -> return illegalArgumentExceptionHandler(request, ex)
-                is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(request, ex)
-                is FormatDateTimeException -> return formatDateTimeExceptionHandler(request, ex)
-                is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(request, ex)
-                is RetryableException -> return retryableExceptionHandler(request, ex)
-                is CustomFeignException -> return feignExceptionHandler(request, ex)
-                is MismatchedInputException -> return mismatchedInputExceptionHandler(request, ex)
-                is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(request, ex)
-                is HttpMediaTypeNotSupportedException -> return httpMediaTypeNotSupportedExceptionHandler(request, ex)
-                is RuntimeException -> return runtimeExceptionHandler(request, ex)
+                is JsonParseException -> return jsonParseExceptionHandler(codeError, request, ex)
+                is HttpServerErrorException -> return internalServerErrorExceptionHandler(codeError, request, ex)
+                is NotFoundException -> return notFoundExceptionHandler(codeError, request, ex)
+                is BadRequestException -> return badRequestExceptionHandler(codeError, request, ex)
+                is NullPointerException -> return nullPointerExceptionHandler(codeError, request, ex)
+                is IllegalArgumentException -> return illegalArgumentExceptionHandler(codeError, request, ex)
+                is MethodArgumentNotValidException -> return methodArgumentNotValidExceptionHandler(codeError, request, ex)
+                is FormatDateTimeException -> return formatDateTimeExceptionHandler(codeError, request, ex)
+                is UndeclaredThrowableException -> return undeclaredThrowableExceptionHandler(codeError, request, ex)
+                is RetryableException -> return retryableExceptionHandler(codeError, request, ex)
+                is CustomFeignException -> return feignExceptionHandler(codeError, request, ex)
+                is MismatchedInputException -> return mismatchedInputExceptionHandler(codeError, request, ex)
+                is HttpRequestMethodNotSupportedException -> return httpRequestMethodNotSupportedExceptionHandler(codeError, request, ex)
+                is HttpMediaTypeNotSupportedException -> return httpMediaTypeNotSupportedExceptionHandler(codeError, request, ex)
+                is RuntimeException -> return runtimeExceptionHandler(codeError, request, ex)
 
                 else -> buildReponse(
                     request,
@@ -85,6 +87,7 @@ abstract class ErrorHandler {
     }
 
     public open fun customHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: Exception
     ): ResponseEntity<ErrorMessage>? {
@@ -92,18 +95,20 @@ abstract class ErrorHandler {
     }
 
     private fun undeclaredThrowableExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: UndeclaredThrowableException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            "UndeclaredThrowableException verify method call to add annotation @Throws(Exception.class)",
+            "$codeError UndeclaredThrowableException verify method call to add annotation @Throws(Exception.class)",
             HttpStatus.BAD_REQUEST
         )
     }
 
     private fun retryableExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: RetryableException
     ): ResponseEntity<ErrorMessage> {
@@ -111,12 +116,13 @@ abstract class ErrorHandler {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            "Feign request error: $cause'",
+            "$codeError Feign request error: $cause'",
             HttpStatus.BAD_REQUEST
         )
     }
 
     private fun feignExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: CustomFeignException
     ): ResponseEntity<ErrorMessage> {
@@ -124,133 +130,144 @@ abstract class ErrorHandler {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            "Feign request error: $cause' ${ex.message}",
+            "$codeError Feign request error: $cause' ${ex.message}",
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun jsonParseExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: JsonParseException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Invalid Json",
+            codeError + (ex.message ?: "Invalid Json"),
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun internalServerErrorExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: HttpServerErrorException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Internal error server",
+            codeError + (ex.message ?: "Internal error server"),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
     fun runtimeExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: RuntimeException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Internal error server",
+            codeError + (ex.message ?: "Internal error server"),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
     fun httpRequestMethodNotSupportedExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: HttpRequestMethodNotSupportedException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Request method '" + servletRequest.method + "' not supported",
+            codeError + (ex.message ?: "Request method '" + servletRequest.method + "' not supported"),
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun httpMediaTypeNotSupportedExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: HttpMediaTypeNotSupportedException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Media type '" + servletRequest.method + "' not supported",
+            codeError + (ex.message ?: "Media type '" + servletRequest.method + "' not supported"),
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun notFoundExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: NotFoundException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message!!,
+            codeError + ex.message!!,
             HttpStatus.NOT_FOUND
         )
     }
 
     fun badRequestExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: BadRequestException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Invalid send data",
+            codeError + (ex.message ?: "Invalid send data"),
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun nullPointerExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: NullPointerException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Null pointer error",
+            codeError + (ex.message ?: "Null pointer error"),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
     fun mismatchedInputExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: MismatchedInputException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Jackson error",
+            codeError + (ex.message ?: "Jackson error"),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
 
     fun illegalArgumentExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: IllegalArgumentException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Argument invalid",
+            codeError + (ex.message ?: "Argument invalid"),
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun methodArgumentNotValidExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: MethodArgumentNotValidException
     ): ResponseEntity<ErrorMessage> {
@@ -261,19 +278,20 @@ abstract class ErrorHandler {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            errors.toString(),
+            codeError + errors.toString(),
             HttpStatus.BAD_REQUEST
         )
     }
 
     fun formatDateTimeExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: FormatDateTimeException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Fail to convert String to LocalDate",
+            codeError + (ex.message ?: "Fail to convert String to LocalDate"),
             HttpStatus.BAD_REQUEST
         )
     }

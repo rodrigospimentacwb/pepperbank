@@ -12,22 +12,24 @@ import javax.servlet.http.HttpServletRequest
 class ErrorHandler: ErrorHandler() {
 
     override fun customHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: Exception): ResponseEntity<ErrorMessage>? {
         return when (ex) {
-            is AccountValidationException -> accountValidationExceptionHandler(servletRequest, ex)
+            is AccountValidationException -> accountValidationExceptionHandler(codeError, servletRequest, ex)
             else -> null
         }
     }
 
     private fun accountValidationExceptionHandler(
+        codeError: String,
         servletRequest: HttpServletRequest,
         ex: AccountValidationException
     ): ResponseEntity<ErrorMessage> {
         return buildReponse(
             servletRequest,
             ex.javaClass.simpleName,
-            ex.message ?: "Fail in account-manager",
+            codeError + (ex.message ?: "Fail in account-manager"),
             HttpStatus.BAD_REQUEST
         )
     }
