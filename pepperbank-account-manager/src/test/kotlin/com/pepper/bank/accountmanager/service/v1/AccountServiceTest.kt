@@ -4,6 +4,7 @@ import com.pepper.bank.accountmanager.configuration.TestsConfig
 import com.pepper.bank.accountmanager.exception.AccountValidationException
 import com.pepper.bank.accountmanager.repository.AccountRepository
 import com.pepper.bank.api.customer.v1.CustomerApi
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -29,20 +30,15 @@ class AccountServiceTest: DefaultTestValues() {
     @MockBean
     lateinit var customerApi: CustomerApi
 
-    @Rule
-    @JvmField
-    var expectedEx: ExpectedException = ExpectedException.none()
-
     @Test
     fun `should generate exception if the account number already exists more than 10`() {
-        with(expectedEx) {
-            expect(AccountValidationException::class.java)
-            expectMessage(MESSAGE.AGENCY_ACCOUNT_INVALD)
-        }
-
         var account = generateGalileuAccountTest()
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.of(account))
-        accountSevice.generateNewAccountNumber(AGENCY)
+
+        val ex:AccountValidationException = Assert.assertThrows(
+            AccountValidationException::class.java
+        ) { accountSevice.generateNewAccountNumber(AGENCY) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.AGENCY_ACCOUNT_INVALD))
     }
 
     @Test
@@ -53,26 +49,26 @@ class AccountServiceTest: DefaultTestValues() {
 
     @Test
     fun `should validate when creating a new account if the agency has not been informed`() {
-        with(expectedEx) {
-            expect(AccountValidationException::class.java)
-            expectMessage(MESSAGE.AGENCY_INVALD)
-        }
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
         var account = generateGalileuAccountTest()
         account.agency = ""
-        accountSevice.validateNewAccount(account)
+
+        val ex:AccountValidationException = Assert.assertThrows(
+            AccountValidationException::class.java
+        ) { accountSevice.validateNewAccount(account) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.AGENCY_INVALD))
     }
 
     @Test
     fun `should validate when creating a new account if the account number was not informed`() {
-        with(expectedEx) {
-            expect(AccountValidationException::class.java)
-            expectMessage(MESSAGE.ACCOUNT_INVALD)
-        }
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
         var account = generateGalileuAccountTest()
         account.accountNumber = ""
-        accountSevice.validateNewAccount(account)
+
+        val ex:AccountValidationException = Assert.assertThrows(
+            AccountValidationException::class.java
+        ) { accountSevice.validateNewAccount(account) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.ACCOUNT_INVALD))
     }
 
     @Test
