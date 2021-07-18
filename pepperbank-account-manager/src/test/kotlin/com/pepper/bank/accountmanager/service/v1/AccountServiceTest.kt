@@ -5,9 +5,7 @@ import com.pepper.bank.accountmanager.exception.AccountValidationException
 import com.pepper.bank.accountmanager.repository.AccountRepository
 import com.pepper.bank.api.customer.v1.CustomerApi
 import org.junit.Assert
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +30,7 @@ class AccountServiceTest: DefaultTestValues() {
 
     @Test
     fun `should generate exception if the account number already exists more than 10`() {
-        var account = generateGalileuAccountTest()
+        val account = generateGalileuAccountTest()
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.of(account))
 
         val ex:AccountValidationException = Assert.assertThrows(
@@ -50,7 +48,7 @@ class AccountServiceTest: DefaultTestValues() {
     @Test
     fun `should validate when creating a new account if the agency has not been informed`() {
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
-        var account = generateGalileuAccountTest()
+        val account = generateGalileuAccountTest()
         account.agency = ""
 
         val ex:AccountValidationException = Assert.assertThrows(
@@ -62,7 +60,7 @@ class AccountServiceTest: DefaultTestValues() {
     @Test
     fun `should validate when creating a new account if the account number was not informed`() {
         Mockito.`when`(accountRepository.findByAgencyAndAccountNumber(Mockito.anyString(),Mockito.anyString())).thenReturn(Optional.empty())
-        var account = generateGalileuAccountTest()
+        val account = generateGalileuAccountTest()
         account.accountNumber = ""
 
         val ex:AccountValidationException = Assert.assertThrows(
