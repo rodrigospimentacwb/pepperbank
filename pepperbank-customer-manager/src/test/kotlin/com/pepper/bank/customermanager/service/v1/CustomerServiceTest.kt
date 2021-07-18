@@ -1,16 +1,13 @@
 package com.pepper.bank.customermanager.service.v1
 
 import com.pepper.bank.customermanager.configuration.TestsConfig
+import com.pepper.bank.customermanager.exception.CustomerValidationException
 import com.pepper.bank.customermanager.repository.CustomerRepository
-import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Customer
 import org.junit.Assert
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 import com.pepper.bank.customermanager.constants.CustomerServiceMessage.Companion as MESSAGE
 
 
@@ -32,10 +30,6 @@ class CustomerServiceTest : DefaultTestValues() {
     @Autowired
     lateinit var customerService: CustomerService
 
-    @Rule
-    @JvmField
-    var expectedEx: ExpectedException = ExpectedException.none()
-
     @Test
     fun `should validate the date of birth`() {
         var customer = generatedTestCustomerDefault()
@@ -44,20 +38,18 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should throw CustomerValidationException if birth date is null`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_BIRTHDATE_NOT_BE_NULL)
-        }
-        customerService.validateBirthDate(null)
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateBirthDate(null) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_BIRTHDATE_NOT_BE_NULL))
     }
 
     @Test
     fun `should throw CustomerValidationException if the date of birth is greater than the current date`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_BIRTHDATE_NOT_BE_GREATER_CURRENT_DATE)
-        }
-        customerService.validateBirthDate(LocalDate.now().plusDays(1))
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateBirthDate(LocalDate.now().plusDays(1)) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_BIRTHDATE_NOT_BE_GREATER_CURRENT_DATE))
     }
 
     @Test
@@ -68,56 +60,50 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should throw CustomerValidationException validate customer if name is null`() {
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_NAME_NOT_BE_NULL_OR_BLANK)
-        }
-        customerService.validateName(null)
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateName(null) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_NAME_NOT_BE_NULL_OR_BLANK))
     }
 
     @Test
     fun `should throw CustomerValidationException validate customer if name is blank`() {
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_NAME_NOT_BE_NULL_OR_BLANK)
-        }
-        customerService.validateName("")
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateName("") }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_NAME_NOT_BE_NULL_OR_BLANK))
     }
 
     @Test
     fun `should throw CustomerValidationException validate customer if name be longer than 100 characters`() {
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_NAME_LONG_100_CHARACTERS)
-        }
-        customerService.validateName(NAME_INVALID_MORE_100_CHACARACTERS)
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateName(NAME_INVALID_MORE_100_CHACARACTERS) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_NAME_LONG_100_CHARACTERS))
     }
 
     @Test
     fun `should throw CustomerValidationException if CPF is null`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_CPF_NOT_BE_NULL_OR_BLANK)
-        }
-        customerService.validateCPF(null)
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateCPF(null) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_CPF_NOT_BE_NULL_OR_BLANK))
     }
 
     @Test
     fun `should throw CustomerValidationException if CPF is blank`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_CPF_NOT_BE_NULL_OR_BLANK)
-        }
-        customerService.validateCPF("")
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateCPF("") }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_CPF_NOT_BE_NULL_OR_BLANK))
     }
 
     @Test
     fun `should throw CustomerValidationException if CPF is invalid`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_CPF_INVALID)
-        }
-        customerService.validateCPF(CPF_INVALID)
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateCPF(CPF_INVALID) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_CPF_INVALID))
     }
 
     @Test
@@ -127,13 +113,13 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should throw CustomerValidationException if cpf already exists`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_CPF_ALREADY_IN_USE)
-        }
         var customer = generatedTestCustomerDefault()
         Mockito.`when`(customerRepository.findByCpf(customer.cpf)).thenReturn(Optional.of(customer))
-        customerService.ifExistsCPF(customer.cpf)
+
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.ifExistsCPF(customer.cpf) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_CPF_ALREADY_IN_USE))
     }
 
     @Test
@@ -145,15 +131,15 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should throw CustomerValidationException if id in use`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_ID_INVALID)
-        }
         val id:UUID = UUID.randomUUID()
         var customer = generatedTestCustomerDefault()
         customer.id = id
         Mockito.`when`(customerRepository.findById(id)).thenReturn(Optional.of(customer))
-        customerService.ifExistsId(id)
+
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.ifExistsId(id) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_ID_INVALID))
     }
 
     @Test
@@ -170,15 +156,15 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should validate if the cpf has been changed`() {
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_CPF_CHANGED)
-        }
         var customerMock = generatedGalileuCustomer()
         Mockito.`when`(customerMock.id?.let { customerRepository.findById(it) }).thenReturn(Optional.of(customerMock))
         var customer = generatedGalileuCustomer()
         customer.cpf = "01234567890"
-        customerService.validateChangeCPF(customer)
+
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.validateChangeCPF(customer) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_CPF_CHANGED))
     }
 
     @Test
@@ -190,13 +176,13 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should throw an exception if the maximum number of attempts to generate the new UUID exceeds 10`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_ID_INVALID)
-        }
         var customerMock = generatedGalileuCustomer()
         Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.of(customerMock))
-        customerService.generateNewCustomerUUID()
+
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.generateNewCustomerUUID() }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_ID_INVALID))
     }
 
     @Test
@@ -208,31 +194,30 @@ class CustomerServiceTest : DefaultTestValues() {
 
     @Test
     fun `should throw exception notFound if get all customers is empty`(){
-        with(expectedEx) {
-            expect(NotFoundException::class.java)
-        }
         Mockito.`when`(customerRepository.findAll()).thenReturn(emptyList())
-        customerService.getAll()
+
+        Assert.assertThrows(
+            NotFoundException::class.java
+        ) { customerService.getAll() }
     }
 
     @Test
     fun `should throw exception if UUID invalid in deleteCustomerByUUID`(){
-        with(expectedEx) {
-            expect(CustomerValidationException::class.java)
-            expectMessage(MESSAGE.CUSTOMER_ID_INVALID)
-        }
-        customerService.deleteCustomerByUUID(INVALID_UUID)
+        val ex:CustomerValidationException = Assert.assertThrows(
+            CustomerValidationException::class.java
+        ) { customerService.deleteCustomerByUUID(INVALID_UUID) }
+        Assert.assertTrue(ex.message.equals(MESSAGE.CUSTOMER_ID_INVALID))
     }
 
     @Test
     fun `should throw exception if UUID not exists in deleteCustomerByUUID`(){
         var uuid = UUID.randomUUID()
-        with(expectedEx) {
-            expect(NotFoundException::class.java)
-            expectMessage("Customer id: $uuid not found")
-        }
         Mockito.`when`(customerRepository.findById(Mockito.any(UUID::class.java))).thenReturn(Optional.empty())
-        customerService.deleteCustomerByUUID(uuid)
+
+        val ex:NotFoundException = Assert.assertThrows(
+            NotFoundException::class.java
+        ) { customerService.deleteCustomerByUUID(uuid) }
+        Assert.assertTrue(ex.message.equals("Customer id: $uuid not found"))
     }
 
     @Test

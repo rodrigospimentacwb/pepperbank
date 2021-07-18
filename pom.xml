@@ -19,7 +19,6 @@
         <module>pepperbank-account-manager</module>
         <module>pepperbank-customer-manager</module>
         <module>pepperbank-model</module>
-        <module>pepperbank-exception-handler</module>
         <module>pepperbank-utils</module>
         <module>pepperbank-api</module>
         <module>pepperbank-integration</module>
@@ -88,11 +87,6 @@
             </dependency>
             <dependency>
                 <groupId>com.pepper.bank</groupId>
-                <artifactId>pepperbank-exception-handler</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.pepper.bank</groupId>
                 <artifactId>pepperbank-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -103,6 +97,11 @@
             </dependency>
 
             <!-- External Dependencies -->
+            <dependency>
+                <groupId>com.pepper.bank</groupId>
+                <artifactId>pepperbank-exception-handler</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
@@ -172,6 +171,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>pepper-domain-pepper-studies</id>
+            <name>pepper-domain-pepper-studies</name>
+            <url>https://pepper-domain-295524294934.d.codeartifact.us-east-1.amazonaws.com/maven/pepper-studies/</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>

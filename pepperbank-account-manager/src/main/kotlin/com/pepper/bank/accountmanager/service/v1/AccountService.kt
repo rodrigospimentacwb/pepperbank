@@ -1,10 +1,10 @@
 package com.pepper.bank.accountmanager.service.v1
 
+import com.pepper.bank.accountmanager.exception.AccountValidationException
+import com.pepper.bank.accountmanager.exception.CustomFeignException
 import com.pepper.bank.accountmanager.repository.AccountRepository
 import com.pepper.bank.api.customer.v1.CustomerApi
 import com.pepper.bank.api.dto.customer.CustomerTO
-import com.pepper.bank.handler.exception.AccountValidationException
-import com.pepper.bank.handler.exception.CustomFeignException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Account
 import feign.FeignException

@@ -1,3 +1,3 @@
-package com.pepper.bank.handler.exception
+package com.pepper.bank.accountmanager.exception
 
 class AccountValidationException(message: String) : Exception(message)

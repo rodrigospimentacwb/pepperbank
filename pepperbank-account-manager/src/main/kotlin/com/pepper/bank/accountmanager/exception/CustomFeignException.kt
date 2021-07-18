@@ -1,4 +1,4 @@
-package com.pepper.bank.handler.exception
+package com.pepper.bank.accountmanager.exception
 
 import feign.FeignException
 

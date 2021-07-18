@@ -5,9 +5,7 @@ import com.pepper.bank.customermanager.configuration.TestsConfig
 import com.pepper.bank.customermanager.service.v1.CustomerService
 import com.pepper.bank.customermanager.service.v1.DefaultTestValues
 import com.pepper.bank.model.commons.Customer
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -46,9 +44,6 @@ class CustomerControllerTestIT : DefaultTestValues() {
 
     @Autowired
     lateinit var customerService: CustomerService
-
-    @get:Rule
-    var expectedEx: ExpectedException = ExpectedException.none()
 
     val baseUrl: String = "/api/v1/customers"
 

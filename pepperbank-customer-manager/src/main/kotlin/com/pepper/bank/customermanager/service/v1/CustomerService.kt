@@ -2,9 +2,9 @@ package com.pepper.bank.customermanager.service.v1
 
 import br.com.caelum.stella.validation.CPFValidator
 import com.pepper.bank.api.dto.customer.CustomerTO
+import com.pepper.bank.customermanager.exception.CustomerValidationException
 import com.pepper.bank.customermanager.repository.CustomerRepository
 import com.pepper.bank.handler.exception.BadRequestException
-import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.exception.NotFoundException
 import com.pepper.bank.model.commons.Customer
 import com.pepperbank.utils.converters.JsonConverter

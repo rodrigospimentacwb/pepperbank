@@ -1,7 +1,5 @@
 package com.pepper.bank.customermanager.exception
 
-import com.pepper.bank.handler.exception.AccountValidationException
-import com.pepper.bank.handler.exception.CustomerValidationException
 import com.pepper.bank.handler.handlers.ErrorHandler
 import com.pepper.bank.handler.pojo.ErrorMessage
 import org.springframework.http.HttpStatus
