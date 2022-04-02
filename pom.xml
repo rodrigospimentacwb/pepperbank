@@ -34,7 +34,7 @@
         <spring-boot.version>2.5.12</spring-boot.version>
         <log4j.version>2.17.1</log4j.version>
         <javax-el.version>3.0.0</javax-el.version>
-        <postgres.version>42.2.25</postgres.version>
+        <postgres.version>42.3.3</postgres.version>
         <spring-boot-validation.version>2.1.6.RELEASE</spring-boot-validation.version>
         <mockito.version>3.3.3</mockito.version>
         <junit.version>4.13.1</junit.version>
