@@ -38,7 +38,7 @@
         <spring-boot-validation.version>2.1.6.RELEASE</spring-boot-validation.version>
         <mockito.version>3.3.3</mockito.version>
         <junit.version>4.13.1</junit.version>
-        <liquibase-core.version>4.2.2</liquibase-core.version>
+        <liquibase-core.version>4.8.0</liquibase-core.version>
         <caellum-stella-core.version>2.1.2</caellum-stella-core.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <jackson-datatype-jsr310.version>2.12.3</jackson-datatype-jsr310.version>
